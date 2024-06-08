@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Table of DocSorpbd</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+{% include 'main/header.html' %}
+<div class="container">
+    <h2>Список  каких то докуметов</h2>
+    <a href="/create_doc_sorpbd">добавить новую запись</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Автор</th>
+                <th>номер свидетельства</th>
+                <th>название базы данных</th>
+                <th>номер заявки</th>
+                <th>дата заявки</th>
+                <th>дата регистрации</th>
+                <th>авторы</th>
+                <th>правообладатель</th>
+                <th>правообладатель организация</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in docsorpbd_list %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.registration_certificate_number }}</td>
+                <td>{{ item.database_name }}</td>
+                <td>{{ item.request_number }}</td>
+                <td>{{ item.requestdate }}44444</td>
+                <td>{{ item.registrationdate }}33333</td>
+                <td>
+                    <ul>
+                        {% for author in item.authors.all %}
+                            <li>{{ author.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        {% for individual_owner in item.individual_owners.all %}
+                            <li>{{ individual_owner.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        {% for organization_owner in item.organization_owners.all %}
+                            <li>{{ organization_owner.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
