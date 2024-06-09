@@ -1,0 +1,27 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавление автора</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+	{% include 'main/header.html' %}
+    <div class="container mt-5">
+        <h2>Добавление автора</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="autorName">Имя автора</label>
+                <input type="text" class="form-control" id="autorName" name="autor" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+        </form>
+    </div>
+
+   
+</body>
+</html>

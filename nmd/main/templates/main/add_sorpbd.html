@@ -25,7 +25,13 @@
       <div class="mb-3">
         <label name="autor" for="authorSelect" class="form-label">Автор</label>
         		<select name="autor" class="form-select" id="authorSelect">
-        		    <option value="value1">asdads</option>
+        		   
+                {% for autor in autors %}
+
+                  <option value="{{ autor.id }}">{{ autor.name }}</option>
+
+                {% endfor %}
+
         		</select>
       </div>
 
