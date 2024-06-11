@@ -21,6 +21,9 @@ def login_who(request):#кто залогинин
 	print(user_data)
 	return user_data
 
+def type_user(email):return None # заготовка под раздение полномочий
+
+
 def test(request):
 	return redirect('/a', permanent=True)
 
