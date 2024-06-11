@@ -13,5 +13,9 @@ urlpatterns = [
     path('delete_doc_sorpbd/<int:pk>/', views.delete_doc_sorpbd, name='delete_doc_sorpbd'),
     path('list_SoftwareRegistrationCertificate/',views.list_SoftwareRegistrationCertificate),
 
+    path('registrate/', views.register_view, name='register_view'),
+    path('login/', views.login_view, name='login_view'),
+     path('exit/', views.exit_view, name='exit'),
+
 
 ]

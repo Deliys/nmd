@@ -35,3 +35,15 @@ class SoftwareRegistrationCertificate(models.Model):
     authors = models.ManyToManyField(Autor)
     individual_owners = models.ManyToManyField(Owner, related_name='software_individual_owners')  # Changed related_name
     organization_owners = models.ManyToManyField(Owner, related_name='software_organization_owners')  # Changed related_name
+
+class User(models.Model):
+    USER_TYPES = (
+        ('user', 'Пользователь'),
+        ('manager', 'Менеджер'),
+        ('admin', 'Админ'),
+    )
+    password = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
+    phone = models.CharField(max_length=15)
+    email = models.EmailField(unique=True)
+    type_user = models.CharField(max_length=12, choices=USER_TYPES,default='user')

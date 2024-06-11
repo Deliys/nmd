@@ -1,4 +1,4 @@
-  <style>
+<style>
   .dropdown {
     position: relative;
     display: inline-block;
@@ -26,56 +26,57 @@
     display: block;
   }
 </style>
-  <header class="p-3 mb-3 border-bottom">
-    <div class="container">
-      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
-          <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
-        </a>
+<header class="p-3 mb-3 border-bottom">
+  <div class="container">
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+      <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 link-body-emphasis text-decoration-none">
+        <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
+      </a>
 
-        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="/" class="nav-link px-2 link-secondary">Главная</a></li>
-            <div class="dropdown">
-                <a  class="nav-link px-2 link-body-emphasis">Авторы</a>
-                <div class="dropdown-content">
-                  <a href="/autor">Список авторов</a>
-                  <a href="/create_autor">Добавить автора</a>
-                </div>
+      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        <li><a href="/" class="nav-link px-2 link-secondary">Главная</a></li>
+        <div class="dropdown">
+          <a  class="nav-link px-2 link-body-emphasis">Авторы</a>
+          <div class="dropdown-content">
+            <a href="/autor">Список авторов</a>
+            <a href="/create_autor">Добавить автора</a>
           </div>
+        </div>
 
-          
-            <div class="dropdown">
-                <a  class="nav-link px-2 link-body-emphasis">Документы</a>
-                <div class="dropdown-content">
-                  <a href="/doc_sorpbd/">Свидетельство о регистрации программы базы данных</a>
-                  <a href="/list_SoftwareRegistrationCertificate/">Свидетельство о регистрации программы для ЭВМ</a>
-                  <a href="#">Журнал</a>
-                  <a href="#">Диссертация</a>
-                  <a href="#">Автореферат диссертации</a>
-
-                </div>
+        <div class="dropdown">
+          <a  class="nav-link px-2 link-body-emphasis">Документы</a>
+          <div class="dropdown-content">
+            <a href="/doc_sorpbd/">Свидетельство о регистрации программы базы данных</a>
+            <a href="/list_SoftwareRegistrationCertificate/">Свидетельство о регистрации программы для ЭВМ</a>
+            <a href="#">Журнал</a>
+            <a href="#">Диссертация</a>
+            <a href="#">Автореферат диссертации</a>
           </div>
-            <div class="dropdown">
-                <a  class="nav-link px-2 link-body-emphasis">Правообладатели</a>
-                <div class="dropdown-content">
-                  <a href="/pravo">Список правообладателей</a>
-                  <a href="/add_pravo/">Добавить правообладателей</a>
-   
+        </div>
 
-                </div>
+        <div class="dropdown">
+          <a  class="nav-link px-2 link-body-emphasis">Правообладатели</a>
+          <div class="dropdown-content">
+            <a href="/pravo">Список правообладателей</a>
+            <a href="/add_pravo/">Добавить правообладателей</a>
           </div>
+        </div>
 
-        </ul>
+      </ul>
 
+      <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+        <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+      </form>
 
-
-        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-          <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
-        </form>
-
-
-
+      {% if user_name %}
+      <div class="dropdown">
+        <a class="nav-link px-2 link-body-emphasis">{{ user_name }}</a>
+        <div class="dropdown-content">
+          <a href="/exit">Выход</a>
         </div>
       </div>
+      {% endif %}
+
     </div>
-  </header>
+  </div>
+</header>
