@@ -24,25 +24,28 @@ def login_who(request):#кто залогинин
 def type_user(email):return None # заготовка под раздение полномочий
 
 
-def test(request):
+def main_page(request):
 	return redirect('/a', permanent=True)
-
+#профиль пользователя
+def user_profile(request):
+	return redirect("/")
 #обработка удалений
 
 def delete_doc_sorpbd(request, pk):
-	if login_or_no(request) == False:return redirect('/login', permanent=True)#если пользователь не залогин , то пойдет отдыхать
 	doc_sorpbd = get_object_or_404(DocSorpbd, id=pk)
 	if request.method == 'POST':
-
 		doc_sorpbd.delete()
-
 		return redirect('/a')
-
 	return redirect('render_doc_sorpbd')
-
+def delete_doc_soft(request, pk):
+	SoftwareRegistrationCertificatea = get_object_or_404(SoftwareRegistrationCertificate, id=pk)
+	if request.method == 'POST':
+		SoftwareRegistrationCertificatea.delete()
+		return redirect('/list_SoftwareRegistrationCertificate')
+	return redirect('render_doc_sorpbd')
 #отрисовка докуметов
 def render_doc_sorpbd(request):
-	if login_or_no(request) == False:return redirect('/login', permanent=True)#если пользователь не залогин , то пойдет отдыхать
+	if login_or_no(request) == False:return redirect('/login')#если пользователь не залогин , то пойдет отдыхать
 
 	doc_sorpbd = DocSorpbd.objects.all()
 	context = {
@@ -52,7 +55,7 @@ def render_doc_sorpbd(request):
 	return render(request,"main/doc_sorpbd.html", context)
 
 def list_SoftwareRegistrationCertificate(request):
-	if login_or_no(request) == False:return redirect('/login', permanent=True)#если пользователь не залогин , то пойдет отдыхать
+	if login_or_no(request) == False:return redirect('/login')#если пользователь не залогин , то пойдет отдыхать
 
 	doc_sorpbd = SoftwareRegistrationCertificate.objects.all()
 	context = {
@@ -63,7 +66,7 @@ def list_SoftwareRegistrationCertificate(request):
 
 
 def get_autor(request):
-	if login_or_no(request) == False:return redirect('/login', permanent=True)#если пользователь не залогин , то пойдет отдыхать
+	if login_or_no(request) == False:return redirect('/login')#если пользователь не залогин , то пойдет отдыхать
 
 	Autorr = Autor.objects.all()
 	context = {
@@ -72,7 +75,7 @@ def get_autor(request):
 	}
 	return render(request,"main/list_autor.html", context)
 def get_pravo(request):
-	if login_or_no(request) == False:return redirect('/login', permanent=True)#если пользователь не залогин , то пойдет отдыхать
+	if login_or_no(request) == False:return redirect('/login')#если пользователь не залогин , то пойдет отдыхать
 
 
 	Ownerr = Owner.objects.all()
@@ -84,7 +87,7 @@ def get_pravo(request):
 
 #cоздание документов
 def create_doc_sorpbd(request):
-	if login_or_no(request) == False:return redirect('/login', permanent=True)#если пользователь не залогин , то пойдет отдыхать
+	if login_or_no(request) == False:return redirect('/login')#если пользователь не залогин , то пойдет отдыхать
 
 
 	if request.method == 'POST':
@@ -141,7 +144,7 @@ def create_doc_sorpbd(request):
 
 
 def create_autor(request):
-	if login_or_no(request) == False:return redirect('/login', permanent=True)#если пользователь не залогин , то пойдет отдыхать
+	if login_or_no(request) == False:return redirect('/login')#если пользователь не залогин , то пойдет отдыхать
 
 
 	if request.method == 'POST':
@@ -164,7 +167,7 @@ def create_autor(request):
 
 
 def create_evm(request):
-	if login_or_no(request) == False:return redirect('/login', permanent=True)#если пользователь не залогин , то пойдет отдыхать
+	if login_or_no(request) == False:return redirect('/login')#если пользователь не залогин , то пойдет отдыхать
 
 
 	if request.method == 'POST':
@@ -235,7 +238,7 @@ def login_view(request):
                     'type': user.type_user,
                     'email':email
                 }
-                response = redirect('/')
+                response = redirect('/a')
                 response.set_cookie('user_data', json.dumps(user_data), max_age=3600)
                 return response
         except User.DoesNotExist:
