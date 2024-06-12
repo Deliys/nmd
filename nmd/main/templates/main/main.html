@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>Table of DocSorpbd</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+</head>
+
+<body>
+
+{% include 'main/header.html' %}
+
+<div class="container">
+    <h6 style="color:ccc">*отображаются последние 5 записей</h6>
+    <h2>Свидетельство о регистрации программы базы данных</h2>
+
+
+
+    <!-- Таблица для doc_sorpbd -->
+
+
+
+    <table class="table table-striped">
+
+        <thead>
+
+            <tr>
+
+                <th>Автор</th>
+                <th>номер свидетельства</th>
+                <th>название базы данных</th>
+                <th>номер заявки</th>
+                <th>дата заявки</th>
+                <th>дата регистрации</th>
+                <th>авторы</th>
+                <th>правообладатель</th>
+                <th>правообладатель организация</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            {% for item in doc_sorpbd %}
+
+            <tr>
+
+                <td>{{ item.author }}</td>
+
+                <td>{{ item.certificate_number }}</td>
+
+                <td>{{ item.database_name }}</td>
+
+                <td>{{ item.request_number }}</td>
+
+                <td>{{ item.request_date }}</td>
+
+                <td>{{ item.registration_date }}</td>
+
+                <td>
+
+                    <ul>
+
+                        {% for author in item.authors.all %}
+
+                            <li>{{ author.name }}</li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                </td>
+
+                <td>
+
+                    <ul>
+
+                        {% for individual_owner in item.individual_owners.all %}
+
+                            <li>{{ individual_owner.name }}</li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                </td>
+
+                <td>
+
+                    <ul>
+
+                        {% for organization_owner in item.organization_owners.all %}
+
+                            <li>{{ organization_owner.name }}</li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+
+    <!-- Список Свидетельств о регистрации программы для ЭВМ -->
+
+    <h2>Свидетельств о регистрации программы для ЭВМ</h2>
+
+
+    <table class="table table-striped">
+
+        <thead>
+
+            <tr>
+
+                <th>id</th>
+                <th>номер свидетельства</th>
+                <th>название программы</th>
+                <th>номер заявки</th>
+                <th>дата заявки</th>
+                <th>дата регистрации</th>
+                <th>авторы</th>
+                <th>правообладатель</th>
+                <th>правообладатель организация</th>
+
+            </tr>
+
+        </thead>
+        <tbody>
+            {% for item in softwareRegistrationCertificate %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.certificate_number }}</td>
+                <td>{{ item.software_name }}</td>
+                <td>{{ item.request_number }}</td>
+                <td>{{ item.request_date }}</td>
+                <td>{{ item.registration_date }}</td>
+                <td>
+                    <ul>
+                        {% for author in item.authors.all %}
+                            <li>{{ author.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        {% for individual_owner in item.individual_owners.all %}
+                            <li>{{ individual_owner.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        {% for organization_owner in item.organization_owners.all %}
+                            <li>{{ organization_owner.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

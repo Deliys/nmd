@@ -25,7 +25,16 @@ def type_user(email):return None # заготовка под раздение п
 
 
 def main_page(request):
-	return redirect('/a', permanent=True)
+    if login_or_no(request) == False:
+        return redirect('/login')  # если пользователь не залогин, то пойдет отдыхать
+    doc_sorpbd = SoftwareRegistrationCertificate.objects.order_by('-id')[:5]
+    softwareRegistrationCertificate = SoftwareRegistrationCertificate.objects.order_by('-id')[:5]
+    context = {
+        "doc_sorpbd": doc_sorpbd,
+        "softwareRegistrationCertificate": softwareRegistrationCertificate,
+        "user_name": login_who(request)['email']
+    }
+    return render(request, "main/main.html", context)
 #профиль пользователя
 def user_profile(request):
 	return redirect("/")
