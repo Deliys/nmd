@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 # Create your views here.
-from .models import DocSorpbd ,Owner ,Autor ,SoftwareRegistrationCertificate
+from .models import DocSorpbd ,Owner ,Autor ,SoftwareRegistrationCertificate,Article
 from django.shortcuts import render, redirect
 from .forms import DocSorpbdForm 
 from django.shortcuts import get_object_or_404, redirect
@@ -38,7 +38,12 @@ def main_page(request):
 def user_profile(request):
 	return redirect("/")
 #обработка удалений
-
+def delete_artical_in_sbor(request,pk):
+	doc_sorpbd = get_object_or_404(Article, id=pk)
+	if request.method == 'POST':
+		doc_sorpbd.delete()
+		return redirect('/list_artical_in_sbor')
+	return redirect('render_doc_sorpbd')	
 def delete_doc_sorpbd(request, pk):
 	doc_sorpbd = get_object_or_404(DocSorpbd, id=pk)
 	if request.method == 'POST':
@@ -52,6 +57,15 @@ def delete_doc_soft(request, pk):
 		return redirect('/list_SoftwareRegistrationCertificate')
 	return redirect('render_doc_sorpbd')
 #отрисовка докуметов
+def render_article_list(request):
+	if login_or_no(request) == False:return redirect('/login')#если пользователь не залогин , то пойдет отдыхать
+
+	articles = Article.objects.all()
+	context = {
+		'article_list': articles,
+		'user_name': login_who(request)['email']
+	}
+	return render(request, "main/article_list.html", context)
 def render_doc_sorpbd(request):
 	if login_or_no(request) == False:return redirect('/login')#если пользователь не залогин , то пойдет отдыхать
 
@@ -143,13 +157,13 @@ def create_doc_sorpbd(request):
 			doc.authors.set(author_ids)
 		
 		# Добавляем правообладателей
-		if data['individual_owners']:
+		if "individual_owners"in data:
 			individual_owners = data['individual_owners'].split(',')
 			for owner in individual_owners:
 				individual_owner, _ = Owner.objects.get_or_create(id=owner.strip())
 				doc.individual_owners.add(individual_owner)
 		
-		if data['organization_owner']:
+		if "organization_owner" in data:
 			organization_owners = data['organization_owner'].split(',')
 			for owner in organization_owners:
 				organization_owner, _ = Owner.objects.get_or_create(id=owner.strip())
@@ -223,20 +237,20 @@ def create_evm(request):
 		for author_id in author_ids:
 			author, _ = Autor.objects.get_or_create(id=author_id.strip())
 			doc.authors.set(author_ids)
+		if "individual_owners" in data:
+			# Получаем список ID индивидуальных правообладателей
+			individual_owner_ids = data.getlist('individual_owners')
+			for owner_id in individual_owner_ids:
+				individual_owner, _ = Owner.objects.get_or_create(id=owner_id.strip())
+				doc.individual_owners.add(individual_owner)
+		if "organization_owners" in data:
+			# Получаем список ID организационных правообладателей
+			organization_owner_ids = data.getlist('organization_owners')
+			for owner_id in organization_owner_ids:
+				organization_owner, _ = Owner.objects.get_or_create(id=owner_id.strip())
+				doc.organization_owners.add(organization_owner)
 
-		# Получаем список ID индивидуальных правообладателей
-		individual_owner_ids = data.getlist('individual_owners')
-		for owner_id in individual_owner_ids:
-			individual_owner, _ = Owner.objects.get_or_create(id=owner_id.strip())
-			doc.individual_owners.add(individual_owner)
-
-		# Получаем список ID организационных правообладателей
-		organization_owner_ids = data.getlist('organization_owners')
-		for owner_id in organization_owner_ids:
-			organization_owner, _ = Owner.objects.get_or_create(id=owner_id.strip())
-			doc.organization_owners.add(organization_owner)
-
-		return redirect('/list_SoftwareRegistrationCertificate', permanent=True)
+			return redirect('/list_SoftwareRegistrationCertificate', permanent=True)
 	else:
 
 		individual_owners = Owner.objects.filter(owner_types=True)

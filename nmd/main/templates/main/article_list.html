@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Список статей</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+{% include 'main/header.html' %}
+<div class="container">
+    <h2>Список статей в сборнике</h2>
+    <a href="/create_article">Добавить новую статью</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Название статьи</th>
+                <th>Журнал</th>
+                <th>Год выпуска</th>
+                <th>Том выпуска</th>
+                <th>Сквозной номер</th>
+                <th>Начальная страница</th>
+                <th>Конечная страница</th>
+                <th>Форма представления</th>
+                <th>Дата выхода из печати</th>
+                <th>Авторы</th>
+                <th>Действие</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for article in article_list %}
+            <tr>
+                <td>{{ article.id }}</td>
+                <td>{{ article.title }}</td>
+                <td>{{ article.journal }}</td>
+                <td>{{ article.year }}</td>
+                <td>{{ article.volume }}</td>
+                <td>{{ article.serial_number }}</td>
+                <td>{{ article.start_page }}</td>
+                <td>{{ article.end_page }}</td>
+                <td>{{ article.presentation_form }}</td>
+                <td>{{ article.publication_date }}</td>
+                <td>
+                    <ul>
+                        {% for author in article.authors.all %}
+                            <li>{{ author.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>
+                    <form method="post" action="{% url 'delete_artical_in_sbor' article.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

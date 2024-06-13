@@ -24,6 +24,10 @@ urlpatterns = [
     path('softwareregistrationertificate_detail/<int:pk>/', views.SoftwareRegistrationCertificate_detail, name='softwareRegistrationCertificate_detail'),
     path('add_pravo/',views.add_owner),
 
+    path('list_artical_in_sbor/',views.render_article_list),
+    path('delete_artical_in_sbor/<int:pk>/', views.delete_artical_in_sbor, name='delete_artical_in_sbor'),
+
+
 
 
 ]
