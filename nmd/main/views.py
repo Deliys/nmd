@@ -103,6 +103,22 @@ def SoftwareRegistrationCertificate_detail(request, pk):
 	return render(request, 'main/software_detail.html', {'software': software, "user_name": login_who(request)['email']})
 
 #cоздание документов
+def add_owner(request):
+	if login_or_no(request) == False:return redirect('/login')#если пользователь не залогин , то пойдет отдыхать
+	if request.method == 'POST':
+		phone_number = request.POST.get('phone_number')
+		name = request.POST.get('name')
+		owner_types = request.POST.get('owner_types')
+
+		print(owner_types)
+
+		owner_types = 0
+		owner = Owner(phone_number=phone_number, name=name, owner_types=owner_types)
+		owner.save()
+		
+		return redirect('/pravo/')  
+	else:
+		return render(request, 'main/add_owner.html')  
 def create_doc_sorpbd(request):
 	if login_or_no(request) == False:return redirect('/login')#если пользователь не залогин , то пойдет отдыхать
 

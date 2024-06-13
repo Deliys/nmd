@@ -22,6 +22,7 @@ urlpatterns = [
     path('autor_get/<int:pk>/', views.autor_get, name='autor_get'),
     path('docSorp_detail/<int:pk>/', views.DocSorp_detail, name='DocSorp_detail'),
     path('softwareregistrationertificate_detail/<int:pk>/', views.SoftwareRegistrationCertificate_detail, name='softwareRegistrationCertificate_detail'),
+    path('add_pravo/',views.add_owner),
 
 
 
