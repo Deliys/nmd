@@ -24,7 +24,7 @@
 
       <div class="mb-3">
         <label name="autor" for="authorSelect" class="form-label">Автор</label>
-        		<select name="autor" class="form-select" id="authorSelect">
+        		<select name="autor" class="form-select" id="authorSelect" multiple>
         		   
                 {% for autor in autors %}
 
@@ -82,7 +82,7 @@
 
   <label for="individual_owner" class="form-label">Индивидуальный правообладатель</label>
 
-              <select  name="individual_owners" style="width:100px">
+              <select  name="individual_owners" style="width:100px" multiple>
 
                 {% for owner in individual_owners %}
 
@@ -99,7 +99,7 @@
           <label for="organization_owner" class="form-label">Организационный правообладатель</label>
 
 
-                <select  name="organization_owner" style="width:100px">
+                <select  name="organization_owner" style="width:100px" multiple> 
 
                 {% for owner in organization_owners %}
 

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Автор - {{ autor.last_name }} {{ autor.name }} {{ autor.first_name }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+{% include 'main/header.html' %}
+<div class="container">
+    <h2>Информация об авторе</h2>
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>ID:</th>
+                <td>{{ autor.id }}</td>
+            </tr>
+            <tr>
+                <th>Имя:</th>
+                <td>{{ autor.name }}</td>
+            </tr>
+            <tr>
+                <th>Фамилия:</th>
+                <td>{{ autor.last_name }}</td>
+            </tr>
+            <tr>
+                <th>Отчество:</th>
+                <td>{{ autor.first_name }}</td>
+            </tr>
+            <tr>
+                <th>Шифр научной специальности:</th>
+                <td>{{ autor.code }}</td>
+            </tr>
+            <tr>
+                <th>Дата рождения:</th>
+                <td>{{ autor.birth_day }}</td>
+            </tr>
+            <tr>
+                <th>Дата смерти:</th>
+                <td>{{ autor.death_day }}</td>
+            </tr>
+            <tr>
+                <th>Учёная степень:</th>
+                <td>{{ autor.academic_degree }}</td>
+            </tr>
+            <tr>
+                <th>Место работы:</th>
+                <td>{{ autor.research_code }}</td>
+            </tr>
+            <tr>
+                <th>Телефон:</th>
+                <td>{{ autor.phone }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="container">
+    <h2>Документы автора</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Тип</th>
+                <th>название</th>
+                <th>Действие</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for docu in documentss %}
+
+	            {% for document in docu.documents %}
+	            <tr>
+	                <td>{{ document.id }}</td>
+	                <td>{{ document.name_doc }}</td>
+	                <td>{{ docu.name_t }}</td>
+
+	                <td>
+	                    <a href="{{docu.bt}}/{{document.id}}" class="btn btn-primary">Посмотреть запись</a>
+	                </td>
+	            </tr>
+	            {% endfor %}
+	        {% endfor %}
+
+
+        </tbody>
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+
+

@@ -15,7 +15,7 @@
 <form method="post">
   <div class="mb-3">
     <label for="authorSelect" class="form-label">Автор</label>
-    <select name="authors" class="form-select" id="authorSelect">
+    <select name="authors" class="form-select" id="authorSelect" multiple>
       {% for author in authors %}
         <option value="{{ author.id }}">{{ author.name }}</option>
       {% endfor %}
@@ -43,7 +43,7 @@
   </div>
   <div class="mb-3">
     <label for="individualOwnerSelect" class="form-label">Индивидуальный правообладатель</label>
-    <select name="individual_owners" class="form-select" id="individualOwnerSelect">
+    <select name="individual_owners" class="form-select" id="individualOwnerSelect" multiple>
       {% for owner in individual_owners %}
         <option value="{{ owner.id }}">{{ owner.name }}</option>
       {% endfor %}
@@ -51,7 +51,7 @@
   </div>
   <div class="mb-3">
     <label for="organizationOwnerSelect" class="form-label">Организационный правообладатель</label>
-    <select name="organization_owners" class="form-select" id="organizationOwnerSelect">
+    <select name="organization_owners" class="form-select" id="organizationOwnerSelect" multiple>
       {% for owner in organization_owners %}
         <option value="{{ owner.id }}">{{ owner.name }}</option>
       {% endfor %}

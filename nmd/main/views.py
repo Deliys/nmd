@@ -18,23 +18,22 @@ def login_or_no(request):#проверка на логин
 
 def login_who(request):#кто залогинин
 	user_data = json.loads(request.COOKIES.get('user_data', '{}'))
-	print(user_data)
 	return user_data
 
 def type_user(email):return None # заготовка под раздение полномочий
 
 
 def main_page(request):
-    if login_or_no(request) == False:
-        return redirect('/login')  # если пользователь не залогин, то пойдет отдыхать
-    doc_sorpbd = SoftwareRegistrationCertificate.objects.order_by('-id')[:5]
-    softwareRegistrationCertificate = SoftwareRegistrationCertificate.objects.order_by('-id')[:5]
-    context = {
-        "doc_sorpbd": doc_sorpbd,
-        "softwareRegistrationCertificate": softwareRegistrationCertificate,
-        "user_name": login_who(request)['email']
-    }
-    return render(request, "main/main.html", context)
+	if login_or_no(request) == False:
+		return redirect('/login')  # если пользователь не залогин, то пойдет отдыхать
+	doc_sorpbd = DocSorpbd.objects.order_by('-id')[:5]
+	softwareRegistrationCertificate = SoftwareRegistrationCertificate.objects.order_by('-id')[:5]
+	context = {
+		"doc_sorpbd": doc_sorpbd,
+		"softwareRegistrationCertificate": softwareRegistrationCertificate,
+		"user_name": login_who(request)['email']
+	}
+	return render(request, "main/main.html", context)
 #профиль пользователя
 def user_profile(request):
 	return redirect("/")
@@ -94,6 +93,15 @@ def get_pravo(request):
 	}
 	return render(request,"main/list_pravo.html", context)
 
+def DocSorp_detail(request, pk):
+	if login_or_no(request) == False:return redirect('/login')#если пользователь не залогин , то пойдет отдыхать
+	doc = get_object_or_404(DocSorpbd, pk=pk)
+	return render(request, 'main/doc_detail.html', {'doc': doc,"user_name":login_who(request)['email']})
+def SoftwareRegistrationCertificate_detail(request, pk):
+	if login_or_no(request) == False: return redirect('/login')  # если пользователь не залогинен, то пойдет отдыхать
+	software = get_object_or_404(SoftwareRegistrationCertificate, pk=pk)
+	return render(request, 'main/software_detail.html', {'software': software, "user_name": login_who(request)['email']})
+
 #cоздание документов
 def create_doc_sorpbd(request):
 	if login_or_no(request) == False:return redirect('/login')#если пользователь не залогин , то пойдет отдыхать
@@ -112,11 +120,11 @@ def create_doc_sorpbd(request):
 		
 		)
 		doc.save()
-		author_ids = data.getlist('autor')  # Предполагаем, что 'autor' - это список ID авторов
-		doc.authors.set(author_ids)  # Используем метод set() для установки связи       
-		# # Добавляем автора
-		# autor = Autor.objects.create(name=data['autor'])
-		# doc.authors.add(autor)
+		# Получаем список ID авторов
+		author_ids = data.getlist('autor')
+		for author_id in author_ids:
+			author, _ = Autor.objects.get_or_create(id=author_id.strip())
+			doc.authors.set(author_ids)
 		
 		# Добавляем правообладателей
 		if data['individual_owners']:
@@ -151,26 +159,30 @@ def create_doc_sorpbd(request):
 
 	return render(request, 'main/add_sorpbd.html',context)
 
-
 def create_autor(request):
-	if login_or_no(request) == False:return redirect('/login')#если пользователь не залогин , то пойдет отдыхать
-
-
+	if login_or_no(request) == False:
+		return redirect('/login')  # если пользователь не залогин, то пойдет отдыхать
 	if request.method == 'POST':
 		data = request.POST
-		
-		# Создаем новый объект DocSorpbd
-		doc = Autor(
-			name=data['autor']
-		
-		)
-		doc.save()
-		return redirect('/a', permanent=True)
-	
-			
-	context = {"user_name":login_who(request)['email']}
 
-	return render(request, 'main/add_create_autor.html',context)
+		dd = data.get('death_day')
+		if dd=="":dd=None #на случай того что человек жив . тогда из формы приходит пустая строка
+		autor = Autor(
+			name=data.get('name'),
+			last_name=data.get('last_name'),
+			first_name=data.get('first_name'),
+			code=data.get('code'),
+			middle_name=data.get('middle_name'),
+			birth_day=data.get('birth_day'),
+			death_day=dd,
+			academic_degree=data.get('academic_degree'),
+			research_code=data.get('research_code'),
+			phone=data.get('phone')
+		)
+		autor.save()
+		return redirect('/autor', permanent=True)
+	context = {"user_name": login_who(request)['email']}
+	return render(request, 'main/add_create_autor.html', context)
 
 
 
@@ -181,31 +193,32 @@ def create_evm(request):
 
 	if request.method == 'POST':
 		data = request.POST
-		
-		# Создаем новый объект DocSorpbd
 		doc = SoftwareRegistrationCertificate(
 			certificate_number=data['certificate_number'],
 			software_name=data['software_name'],
 			request_number=data['request_number'],
 			request_date=data['request_date'],
 			registration_date=data['registration_date'],
-		
 		)
 		doc.save()
+
+		# Получаем список ID авторов
 		author_ids = data.getlist('authors')
-		
-		# Добавляем правообладателей
-		if data['individual_owners']:
-			individual_owners = data['individual_owners'].split(',')
-			for owner in individual_owners:
-				individual_owner, _ = Owner.objects.get_or_create(id=owner.strip())
-				doc.individual_owners.add(individual_owner)
-		
-		if 'organization_owner' in data:
-			organization_owners = data['organization_owner'].split(',')
-			for owner in organization_owners:
-				organization_owner, _ = Owner.objects.get_or_create(id=owner.strip())
-				doc.organization_owners.add(organization_owner)
+		for author_id in author_ids:
+			author, _ = Autor.objects.get_or_create(id=author_id.strip())
+			doc.authors.set(author_ids)
+
+		# Получаем список ID индивидуальных правообладателей
+		individual_owner_ids = data.getlist('individual_owners')
+		for owner_id in individual_owner_ids:
+			individual_owner, _ = Owner.objects.get_or_create(id=owner_id.strip())
+			doc.individual_owners.add(individual_owner)
+
+		# Получаем список ID организационных правообладателей
+		organization_owner_ids = data.getlist('organization_owners')
+		for owner_id in organization_owner_ids:
+			organization_owner, _ = Owner.objects.get_or_create(id=owner_id.strip())
+			doc.organization_owners.add(organization_owner)
 
 		return redirect('/list_SoftwareRegistrationCertificate', permanent=True)
 	else:
@@ -227,35 +240,52 @@ def create_evm(request):
 	 
 
 	return render(request, 'main/add_evm.html',context)
+def autor_get(request, pk):
+	if not login_or_no(request):
+		return redirect('/login')  # Redirect to login if the user is not logged in
+	autor = get_object_or_404(Autor, pk=pk)
+
+	#получение докуметов автора по базам
+	doc_sorpbd = DocSorpbd.objects.filter(authors=autor)
+	software_registration_certificates = SoftwareRegistrationCertificate.objects.filter(authors=autor)
+
+	#подготовка списка для шаблона 
+	documentss = []
+	documentss.append({"bt":"/docSorp_detail","name_t":"Свидетельство о регистрации программы базы данных","documents":doc_sorpbd})
+	documentss.append({"bt":"/softwareregistrationertificate_detail","name_t":"Свидетельств о регистрации программы для ЭВМ","documents":software_registration_certificates})
 
 
-
+	return render(request, 'main/autor_detail.html', {
+		'autor': autor,
+		"user_name": login_who(request)['email'],
+		'documentss': documentss
+	})
 #авторизация
 def login_view(request):
 
-    if request.method == 'POST':
-        email = request.POST['email']
-        password = request.POST['password']
-        try:
-            user = User.objects.get(email=email)
-            if user.password==password:
+	if request.method == 'POST':
+		email = request.POST['email']
+		password = request.POST['password']
+		try:
+			user = User.objects.get(email=email)
+			if user.password==password:
 
-     
-                # Сохраняем информацию о пользователе в куках
-                user_data = {
-                    'id': user.id,
-                    'type': user.type_user,
-                    'email':email
-                }
-                response = redirect('/a')
-                response.set_cookie('user_data', json.dumps(user_data), max_age=3600)
-                return response
-        except User.DoesNotExist:
-            pass
-        context = {"er": "Неправильный email или пароль"}
-        return render(request, 'main/login.html', context)
-    else:
-        return render(request, 'main/login.html')
+	 
+				# Сохраняем информацию о пользователе в куках
+				user_data = {
+					'id': user.id,
+					'type': user.type_user,
+					'email':email
+				}
+				response = redirect('/a')
+				response.set_cookie('user_data', json.dumps(user_data), max_age=3600)
+				return response
+		except User.DoesNotExist:
+			pass
+		context = {"er": "Неправильный email или пароль"}
+		return render(request, 'main/login.html', context)
+	else:
+		return render(request, 'main/login.html')
 
 def register_view(request):
 	if request.method == 'POST':
@@ -276,8 +306,8 @@ def register_view(request):
 	return render(request, 'main/register.html')
 
 def exit_view(request):
-    # Удаляем куки с информацией о пользователе
-    response = redirect('/')
-    response.delete_cookie('user_data')
-    # Выполняем logout пользователя
-    return response
+	# Удаляем куки с информацией о пользователе
+	response = redirect('/')
+	response.delete_cookie('user_data')
+	# Выполняем logout пользователя
+	return response

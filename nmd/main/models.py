@@ -1,11 +1,18 @@
 from django.db import models
 
-
 class Autor(models.Model):
-
     id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)  # 1) имя
+    last_name = models.CharField(max_length=50,null=True)  # 2) фамилия
+    first_name = models.CharField(max_length=100,null=True)  # 4) отчество
+    code = models.CharField(max_length=50 ,null=True)  # 5) шифр научной специальности человека
+    middle_name = models.CharField(max_length=100, blank=True, null=True)  # 4) отчество (если есть)
+    birth_day = models.DateField(blank=True, null=True)  # 6) дата рождения
+    death_day = models.DateField(blank=True, null=True)  # может быть None
+    academic_degree = models.CharField(max_length=100, blank=True, null=True)  # 14) шифр научной специальности человека
+    research_code = models.CharField(max_length=50,null=True)  # 15) место работы (несколько)
+    phone = models.CharField(max_length=20,null=True)  # 17) телефон
 
-    name = models.CharField(max_length=100)
 
 class DocSorpbd(models.Model):
 
@@ -18,7 +25,8 @@ class DocSorpbd(models.Model):
     authors = models.ManyToManyField(Autor)#автор 
     individual_owners = models.ManyToManyField('Owner', related_name='individual_owners')#правообладатель 
     organization_owners = models.ManyToManyField('Owner', related_name='organization_owners')#
-
+    def name_doc(self):
+        return self.database_name
 class Owner(models.Model):
     id = models.AutoField(primary_key=True)
     phone_number = models.CharField(max_length=20)
@@ -35,7 +43,8 @@ class SoftwareRegistrationCertificate(models.Model):
     authors = models.ManyToManyField(Autor)
     individual_owners = models.ManyToManyField(Owner, related_name='software_individual_owners')  # Changed related_name
     organization_owners = models.ManyToManyField(Owner, related_name='software_organization_owners')  # Changed related_name
-
+    def name_doc(self):
+        return self.software_name
 class User(models.Model):
     USER_TYPES = (
         ('user', 'Пользователь'),

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Регистрация ПО - {{ software.name_doc }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+{% include 'main/header.html' %}
+<div class="container">
+    <h2>Информация о регистрации ПО</h2>
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>ID:</th>
+                <td>{{ software.id }}</td>
+            </tr>
+            <tr>
+                <th>Номер свидетельства:</th>
+                <td>{{ software.certificate_number }}</td>
+            </tr>
+            <tr>
+                <th>Название ПО:</th>
+                <td>{{ software.software_name }}</td>
+            </tr>
+            <tr>
+                <th>Номер заявки:</th>
+                <td>{{ software.request_number }}</td>
+            </tr>
+            <tr>
+                <th>Дата заявки:</th>
+                <td>{{ software.request_date }}</td>
+            </tr>
+            <tr>
+                <th>Дата регистрации:</th>
+                <td>{{ software.registration_date }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="container">
+    <h2>Авторы ПО</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Имя</th>
+                <th>Фамилия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for author in software.authors.all %}
+            <tr>
+                <td>{{ author.id }}</td>
+                <td>{{ author.name }}</td>
+                <td>{{ author.last_name }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="container">
+    <h2>Индивидуальные владельцы</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Имя</th>
+                <th>Фамилия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for owner in software.individual_owners.all %}
+            <tr>
+                <td>{{ owner.id }}</td>
+                <td>{{ owner.name }}</td>
+                <td>{{ owner.last_name }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="container">
+    <h2>Организационные владельцы</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Название организации</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for owner in software.organization_owners.all %}
+            <tr>
+                <td>{{ owner.id }}</td>
+                <td>{{ owner.organization_name }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

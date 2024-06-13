@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Документ - {{ doc.database_name }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+{% include 'main/header.html' %}
+<div class="container">
+    <h2>Информация о документе</h2>
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>ID:</th>
+                <td>{{ doc.id }}</td>
+            </tr>
+            <tr>
+                <th>Номер свидетельства:</th>
+                <td>{{ doc.registration_certificate_number }}</td>
+            </tr>
+            <tr>
+                <th>Название базы данных:</th>
+                <td>{{ doc.database_name }}</td>
+            </tr>
+            <tr>
+                <th>Номер заявки:</th>
+                <td>{{ doc.request_number }}</td>
+            </tr>
+            <tr>
+                <th>Дата заявки:</th>
+                <td>{{ doc.requestdate }}</td>
+            </tr>
+            <tr>
+                <th>Дата регистрации:</th>
+                <td>{{ doc.registrationdate }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="container">
+    <h2>Авторы документа</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Имя</th>
+                <th>Фамилия</th>
+               
+            </tr>
+        </thead>
+        <tbody>
+            {% for author in doc.authors.all %}
+            <tr>
+                <td>{{ author.id }}</td>
+                <td>{{ author.name }}</td>
+                <td>{{ author.last_name }}</td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Repeat the structure above for individual_owners and organization_owners -->
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

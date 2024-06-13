@@ -19,6 +19,10 @@ urlpatterns = [
     path('login/', views.login_view, name='login_view'),
     path('exit/', views.exit_view, name='exit'),
     path('user_profile/', views.user_profile, name='user_profile'),
+    path('autor_get/<int:pk>/', views.autor_get, name='autor_get'),
+    path('docSorp_detail/<int:pk>/', views.DocSorp_detail, name='DocSorp_detail'),
+    path('softwareregistrationertificate_detail/<int:pk>/', views.SoftwareRegistrationCertificate_detail, name='softwareRegistrationCertificate_detail'),
+
 
 
 ]
