@@ -25,6 +25,7 @@ class Article(models.Model):
 	end_page = models.IntegerField()  # 65) конечная страница
 	presentation_form = models.CharField(max_length=50)  # 66) форма представления (печатная, электронная)
 	publication_date = models.DateField()  # 67) дата выхода из печати
+
 class DocSorpbd(models.Model):
 
 	id = models.AutoField(primary_key=True)
@@ -67,3 +68,22 @@ class User(models.Model):
 	phone = models.CharField(max_length=15)
 	email = models.EmailField(unique=True)
 	type_user = models.CharField(max_length=12, choices=USER_TYPES,default='user')
+
+class Dissertation(models.Model):
+	id = models.AutoField(primary_key=True)
+	title = models.CharField(max_length=200)  # название
+	speciality_codes = models.CharField(max_length=200, null=True)  # шифр научной специальности
+	author = models.ManyToManyField(Autor)
+	scientific_supervisor = models.ManyToManyField(Autor,null=True, related_name='supervisor')  # научный руководитель
+	scientific_consultants = models.ManyToManyField(Autor,null=True, related_name='consultants')  # научный консультант
+	science_fields = models.CharField(max_length=200, null=True)  # область науки
+	level = models.CharField(max_length=50, choices=[('candidate', 'Кандидатская'), ('doctor', 'Докторская')])  # уровень
+	organization = models.CharField(max_length=200, null=True)  # организация выполнения диссертации
+	location = models.CharField(max_length=200, null=True)  # место выполнения диссертации
+	def name_doc(self):
+		return self.title
+
+
+	def __str__(self):
+
+		return self.title

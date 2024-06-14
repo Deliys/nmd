@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>таблица авторов</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+{% include 'main/header.html' %}
+<div class="container">
+   <h2>Диссертации</h2>
+   <a href="/add_dissertation/">добавить новую запись</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>название</th>
+                <th>научная специальность</th>
+                <th>Участники</th>
+                <th>область науки</th>
+                <th>уровень</th>
+                <th>организация выполнения диссертации/ место /выполнения диссертации</th>
+                <th>действие</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in dissertation %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.title }}</td>
+                <td>{{ item.speciality_codes }}</td>
+                
+                <td>
+                    <ul>
+                        {% for author in item.author.all %}
+                            <li>{{ author.name}} - автор</li>
+                        {% endfor %}
+                    </ul>
+                    <ul>
+                        {% for author in item.scientific_supervisor.all %}
+                            <li>{{ author.name}} - научный руководитель</li>
+                        {% endfor %}
+                    </ul>
+                    <ul>
+                        {% for author in item.scientific_consultants.all %}
+                            <li>{{ author.name}} - научный консультант</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>{{item.science_fields}}</td>
+              
+                <td>{{item.level}}</td>
+                <td>
+                    
+                <li>{{ item.location}} - место выполнения</li>
+                <li>{{ item.organization}} - организация выполнения</li>
+                  
+                  
+            
+
+                </td>
+
+                <td>
+                    <form method="post" action="{% url 'delete_dissertation' item.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

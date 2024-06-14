@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Диссертация - {{ dissertation.title }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+{% include 'main/header.html' %}
+<div class="container">
+    <h2>Информация о диссертации</h2>
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>ID:</th>
+                <td>{{ dissertation.id }}</td>
+            </tr>
+            <tr>
+                <th>Название:</th>
+                <td>{{ dissertation.title }}</td>
+            </tr>
+            <tr>
+                <th>Шифр научной специальности:</th>
+                <td>{{ dissertation.speciality_codes }}</td>
+            </tr>
+            <tr>
+                <th>Автор(ы):</th>
+                <td>{% for author in dissertation.author.all %}{{ author.last_name }} {{ author.name }} {{ author.first_name }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+            </tr>
+            <tr>
+                <th>Научный руководитель:</th>
+                <td>{% for supervisor in dissertation.scientific_supervisor.all %}{{ supervisor.last_name }} {{ supervisor.name }} {{ supervisor.first_name }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+            </tr>
+            <tr>
+                <th>Научный консультант:</th>
+                <td>{% for consultant in dissertation.scientific_consultants.all %}{{ consultant.last_name }} {{ consultant.name }} {{ consultant.first_name }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+            </tr>
+            <tr>
+                <th>Область науки:</th>
+                <td>{{ dissertation.science_fields }}</td>
+            </tr>
+            <tr>
+                <th>Уровень:</th>
+                <td>{{ dissertation.get_level_display }}</td>
+            </tr>
+            <tr>
+                <th>Организация выполнения:</th>
+                <td>{{ dissertation.organization }}</td>
+            </tr>
+            <tr>
+                <th>Место выполнения:</th>
+                <td>{{ dissertation.location }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

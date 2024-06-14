@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 # Create your views here.
-from .models import DocSorpbd ,Owner ,Autor ,SoftwareRegistrationCertificate,Article
+from .models import DocSorpbd ,Owner ,Autor ,SoftwareRegistrationCertificate,Article,Dissertation
 from django.shortcuts import render, redirect
 from .forms import DocSorpbdForm 
 from django.shortcuts import get_object_or_404, redirect
@@ -28,9 +28,11 @@ def main_page(request):
 		return redirect('/login')  # если пользователь не залогин, то пойдет отдыхать
 	doc_sorpbd = DocSorpbd.objects.order_by('-id')[:5]
 	softwareRegistrationCertificate = SoftwareRegistrationCertificate.objects.order_by('-id')[:5]
+	dissertation = Dissertation.objects.order_by('-id')[:5]
 	context = {
 		"doc_sorpbd": doc_sorpbd,
 		"softwareRegistrationCertificate": softwareRegistrationCertificate,
+		"dissertation":dissertation,
 		"user_name": login_who(request)['email']
 	}
 	return render(request, "main/main.html", context)
@@ -341,3 +343,58 @@ def exit_view(request):
 	response.delete_cookie('user_data')
 	# Выполняем logout пользователя
 	return response
+
+
+#тут у нас все связаное с десертациями
+def get_Dissertation(request):
+	if login_or_no(request) == False:return redirect('/login')#если пользователь не залогин , то пойдет отдыхать
+	Dissertationn = Dissertation.objects.all()
+	context = {
+		'dissertation': Dissertationn,
+		"user_name":login_who(request)['email']
+	}
+	return render(request,"main/list_diser.html", context)
+def delete_Dissertation(request, pk):
+	Dissertationa = get_object_or_404(Dissertation, id=pk)
+	if request.method == 'POST':
+		Dissertationa.delete()
+		return redirect('/list_dissertation')
+	return redirect('get_Dissertation')
+def create_dissertation(request):
+    if login_or_no(request) == False:
+        return redirect('/login')  # Redirect if not logged in
+    if request.method == 'POST':
+        data = request.POST
+        doc = Dissertation(
+            title=data['title'],
+            speciality_codes=data['speciality_codes'],
+            science_fields=data['science_fields'],
+            level=data['level'],
+            organization=data['organization'],
+            location=data['location'],
+        )
+        doc.save()
+        author_ids = data.getlist('authors')
+        for author_id in author_ids:
+            author, _ = Autor.objects.get_or_create(id=author_id.strip())
+            doc.author.set(author_ids)
+        supervisor_ids = data.getlist('supervisors')
+        for supervisor_id in supervisor_ids:
+            supervisor, _ = Autor.objects.get_or_create(id=supervisor_id.strip())
+            doc.scientific_supervisor.add(supervisor)
+        consultant_ids = data.getlist('consultants')
+        for consultant_id in consultant_ids:
+            consultant, _ = Autor.objects.get_or_create(id=consultant_id.strip())
+            doc.scientific_consultants.add(consultant)
+        return redirect('/list_dissertation', permanent=True)
+    else:
+        authors = Autor.objects.all()
+        context = {
+            "authors": authors,
+            "user_name": login_who(request)['email']
+        }
+        return render(request, 'main/add_dissertation.html', context)
+def Dissertation_detail(request, pk):
+	if login_or_no(request) == False:return redirect('/login')#если пользователь не залогин , то пойдет отдыхать
+	doc = get_object_or_404(Dissertation, pk=pk)
+	return render(request, 'main/doca_detail.html', {'doc': doc,"user_name":login_who(request)['email']})

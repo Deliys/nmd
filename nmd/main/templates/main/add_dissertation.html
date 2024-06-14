@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Добавление диссертации</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+{% include 'main/header.html' %}
+<div class="container">
+  <h1>Добавление новой диссертации</h1>
+  <form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="title" class="form-label">Название</label>
+      <input name="title" type="text" class="form-control" id="title">
+    </div>
+    <div class="mb-3">
+      <label for="specialityCodes" class="form-label">Шифр научной специальности</label>
+      <input name="speciality_codes" type="text" class="form-control" id="specialityCodes">
+    </div>
+    <div class="mb-3">
+      <label for="scienceFields" class="form-label">Область науки</label>
+      <input name="science_fields" type="text" class="form-control" id="scienceFields">
+    </div>
+    <div class="mb-3">
+      <label for="level" class="form-label">Уровень</label>
+      <select name="level" class="form-select" id="level">
+        <option value="candidate">Кандидатская</option>
+        <option value="doctor">Докторская</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="organization" class="form-label">Организация выполнения</label>
+      <input name="organization" type="text" class="form-control" id="organization">
+    </div>
+    <div class="mb-3">
+      <label for="location" class="form-label">Место выполнения</label>
+      <input name="location" type="text" class="form-control" id="location">
+    </div>
+    <div class="mb-3">
+      <label for="authorSelect" class="form-label">Авторы</label>
+      <select name="authors" class="form-select" id="authorSelect" multiple>
+        {% for author in authors %}
+          <option value="{{ author.id }}">{{ author.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="supervisorSelect" class="form-label">Научные руководители</label>
+      <select name="supervisors" class="form-select" id="supervisorSelect" multiple>
+        {% for supervisor in authors %}
+          <option value="{{ supervisor.id }}">{{ supervisor.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="consultantSelect" class="form-label">Научные консультанты</label>
+      <select name="consultants" class="form-select" id="consultantSelect" multiple>
+        {% for consultant in authors %}
+          <option value="{{ consultant.id }}">{{ consultant.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+  </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

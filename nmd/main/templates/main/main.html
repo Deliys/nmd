@@ -72,24 +72,17 @@
     <!-- Список Свидетельств о регистрации программы для ЭВМ -->
     <h2>Свидетельств о регистрации программы для ЭВМ</h2>
     <table class="table table-striped">
-
         <thead>
-
             <tr>
-
                 <th>id</th>
                 <th>номер свидетельства</th>
                 <th>название программы</th>
                 <th>номер заявки</th>
-
                 <th>авторы</th>
                 <th>правообладатель</th>
                 <th>правообладатель организация</th>
                 <th>действие</th>
-
-
             </tr>
-
         </thead>
         <tbody>
             {% for item in softwareRegistrationCertificate %}
@@ -98,7 +91,6 @@
                 <td>{{ item.certificate_number }}</td>
                 <td>{{ item.software_name }}</td>
                 <td>{{ item.request_number }}</td>
-
                 <td>
                     <ul>
                         {% for author in item.authors.all %}
@@ -121,6 +113,63 @@
                     </ul>
                 </td>
                 <td><a href="/softwareregistrationertificate_detail/{{item.id}}" class="btn btn-primary">Посмотреть запись</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+   <h2>Диссертации</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>название</th>
+                <th>научная специальность</th>
+                <th>Участники</th>
+                <th>область науки</th>
+                <th>уровень</th>
+                <th>организация выполнения диссертации/ место /выполнения диссертации</th>
+                <th>действие</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in dissertation %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.title }}</td>
+                <td>{{ item.speciality_codes }}</td>
+                
+                <td>
+                    <ul>
+                        {% for author in item.author.all %}
+                            <li>{{ author.name}} - автор</li>
+                        {% endfor %}
+                    </ul>
+                    <ul>
+                        {% for author in item.scientific_supervisor.all %}
+                            <li>{{ author.name}} - научный руководитель</li>
+                        {% endfor %}
+                    </ul>
+                    <ul>
+                        {% for author in item.scientific_consultants.all %}
+                            <li>{{ author.name}} - научный консультант</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>{{item.science_fields}}</td>
+              
+                <td>{{item.level}}</td>
+                <td>
+                    
+                <li>{{ item.location}} - место выполнения</li>
+                <li>{{ item.organization}} - организация выполнения</li>
+                  
+                  
+            
+
+                </td>
+
+
+                <td><a href="/dissertation_get/{{item.id}}" class="btn btn-primary">Посмотреть запись</a></td>
             </tr>
             {% endfor %}
         </tbody>
