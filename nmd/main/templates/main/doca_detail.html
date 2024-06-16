@@ -24,7 +24,9 @@
             </tr>
             <tr>
                 <th>Автор(ы):</th>
-                <td>{% for author in dissertation.author.all %}{{ author.last_name }} {{ author.name }} {{ author.first_name }}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+                <td>{% for author in dissertation.author.all %}{% if author.last_name is not none %}{{ author.last_name }}{% endif %}
+{% if author.name is not none %}{{ author.name }}{% endif %}
+{% if author.first_name is not none %}{{ author.first_name }}{% endif %}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
             </tr>
             <tr>
                 <th>Научный руководитель:</th>
