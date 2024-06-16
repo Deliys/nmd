@@ -9,19 +9,31 @@
             var mainSelect = document.getElementById('mainSelect');
             var secondarySelect = document.getElementById('secondarySelect');
 
-            mainSelect.addEventListener('change', function() {
+             function dd() {
                 var value = mainSelect.value;
                 secondarySelect.innerHTML = '';
 
-                if(value === '1') {
+                if(value === 'Dissertation') {
                     var option1 = document.createElement('option');
-                    option1.value = 'field_1';
-                    option1.textContent = 'Поле 1';
+                    option1.value = 'title';
+                    option1.textContent = 'название';
+                    secondarySelect.appendChild(option1);
+                    var option1 = document.createElement('option');
+                    option1.value = 'speciality_codes';
+                    option1.textContent = 'шифр научной специальности';
+                    secondarySelect.appendChild(option1);
+                    var option1 = document.createElement('option');
+                    option1.value = 'level';
+                    option1.textContent = 'уровень';
+                    secondarySelect.appendChild(option1);
+                    var option1 = document.createElement('option');
+                    option1.value = 'location';
+                    option1.textContent = 'место выполнения диссертации';
                     secondarySelect.appendChild(option1);
                 } else if(value === '2') {
                     var option2 = document.createElement('option');
-                    option2.value = 'field_2';
-                    option2.textContent = 'Поле 2';
+                    option2.value = 'organization_owners';
+                    option2.textContent = 'organization_owners';
                     secondarySelect.appendChild(option2);
                 } else if(value === '3') {
                     var option3 = document.createElement('option');
@@ -37,7 +49,9 @@
                     option3.textContent = 'Поле 3';
                     secondarySelect.appendChild(option3);                    
                 }
-            });
+            }
+            dd();
+            mainSelect.addEventListener('change', dd);
         });
     </script>
 </head>
@@ -50,13 +64,14 @@
         <div class="form-group">
             <label for="mainSelect">Выбор</label>
             <select id="mainSelect" class="form-control" name="main_choice">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
+
+                <option value="Dissertation">Диссертации</option>
+                <option value="DocSorpbd">Свидетельство о регистрации программы базы данных</option>
+                <option value="SoftwareRegistrationCertificate">Список Свидетельств о регистрации программы для ЭВМ</option>
             </select>
         </div>
         <div class="form-group">
-            <label for="secondarySelect">Выбор 2</label>
+            <label for="secondarySelect">Поле</label>
             <select id="secondarySelect" class="form-control" name="secondary_choice">
                 <!-- Опции будут добавлены с помощью JavaScript -->
             </select>
@@ -68,6 +83,73 @@
         <button type="submit" class="btn btn-primary">Запрос</button>
     </form>
 </div>
+
+{% if types == "Dissertation" %}
+<div class="container">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>название</th>
+                <th>научная специальность</th>
+                <th>Участники</th>
+                <th>область науки</th>
+                <th>уровень</th>
+                <th>организация выполнения диссертации/ место /выполнения диссертации</th>
+                <th>действие</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in con %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.title }}</td>
+                <td>{{ item.speciality_codes }}</td>
+                
+                <td>
+                    <ul>
+                        {% for author in item.author.all %}
+                            <li>{{ author.name}} - автор</li>
+                        {% endfor %}
+                    </ul>
+                    <ul>
+                        {% for author in item.scientific_supervisor.all %}
+                            <li>{{ author.name}} - научный руководитель</li>
+                        {% endfor %}
+                    </ul>
+                    <ul>
+                        {% for author in item.scientific_consultants.all %}
+                            <li>{{ author.name}} - научный консультант</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>{{item.science_fields}}</td>
+              
+                <td>{{item.level}}</td>
+                <td>
+                    
+                <li>{{ item.location}} - место выполнения</li>
+                <li>{{ item.organization}} - организация выполнения</li>
+                  
+                  
+            
+
+                </td>
+
+                <td><a href="/dissertation_get/{{item.id}}" class="btn btn-primary">Посмотреть запись</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% elif types == "DocSorpbd" %}
+    <!-- Какой-то код для DocSorpbd -->
+{% elif types == "SoftwareRegistrationCertificate" %}
+    <!-- Какой-то код для SoftwareRegistrationCertificate -->
+{% endif %}
+
+
+
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>

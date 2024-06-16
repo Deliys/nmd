@@ -7,7 +7,7 @@ from .forms import DocSorpbdForm
 from django.shortcuts import get_object_or_404, redirect
 from .models import User
 import json
-
+from .forms import SearchForm
 
 def login_or_no(request):#проверка на логин
 	user_data = json.loads(request.COOKIES.get('user_data', '{}'))
@@ -45,7 +45,7 @@ def delete_artical_in_sbor(request,pk):
 	if request.method == 'POST':
 		doc_sorpbd.delete()
 		return redirect('/list_artical_in_sbor')
-	return redirect('render_doc_sorpbd')	
+	return redirect('render_doc_sorpbd')    
 def delete_doc_sorpbd(request, pk):
 	doc_sorpbd = get_object_or_404(DocSorpbd, id=pk)
 	if request.method == 'POST':
@@ -361,40 +361,76 @@ def delete_Dissertation(request, pk):
 		return redirect('/list_dissertation')
 	return redirect('get_Dissertation')
 def create_dissertation(request):
-    if login_or_no(request) == False:
-        return redirect('/login')  # Redirect if not logged in
-    if request.method == 'POST':
-        data = request.POST
-        doc = Dissertation(
-            title=data['title'],
-            speciality_codes=data['speciality_codes'],
-            science_fields=data['science_fields'],
-            level=data['level'],
-            organization=data['organization'],
-            location=data['location'],
-        )
-        doc.save()
-        author_ids = data.getlist('authors')
-        for author_id in author_ids:
-            author, _ = Autor.objects.get_or_create(id=author_id.strip())
-            doc.author.set(author_ids)
-        supervisor_ids = data.getlist('supervisors')
-        for supervisor_id in supervisor_ids:
-            supervisor, _ = Autor.objects.get_or_create(id=supervisor_id.strip())
-            doc.scientific_supervisor.add(supervisor)
-        consultant_ids = data.getlist('consultants')
-        for consultant_id in consultant_ids:
-            consultant, _ = Autor.objects.get_or_create(id=consultant_id.strip())
-            doc.scientific_consultants.add(consultant)
-        return redirect('/list_dissertation', permanent=True)
-    else:
-        authors = Autor.objects.all()
-        context = {
-            "authors": authors,
-            "user_name": login_who(request)['email']
-        }
-        return render(request, 'main/add_dissertation.html', context)
+	if login_or_no(request) == False:
+		return redirect('/login')  # Redirect if not logged in
+	if request.method == 'POST':
+		data = request.POST
+		doc = Dissertation(
+			title=data['title'],
+			speciality_codes=data['speciality_codes'],
+			science_fields=data['science_fields'],
+			level=data['level'],
+			organization=data['organization'],
+			location=data['location'],
+		)
+		doc.save()
+		author_ids = data.getlist('authors')
+		for author_id in author_ids:
+			author, _ = Autor.objects.get_or_create(id=author_id.strip())
+			doc.author.set(author_ids)
+		supervisor_ids = data.getlist('supervisors')
+		for supervisor_id in supervisor_ids:
+			supervisor, _ = Autor.objects.get_or_create(id=supervisor_id.strip())
+			doc.scientific_supervisor.add(supervisor)
+		consultant_ids = data.getlist('consultants')
+		for consultant_id in consultant_ids:
+			consultant, _ = Autor.objects.get_or_create(id=consultant_id.strip())
+			doc.scientific_consultants.add(consultant)
+		return redirect('/list_dissertation', permanent=True)
+	else:
+		authors = Autor.objects.all()
+		context = {
+			"authors": authors,
+			"user_name": login_who(request)['email']
+		}
+		return render(request, 'main/add_dissertation.html', context)
 def Dissertation_detail(request, pk):
 	if login_or_no(request) == False:return redirect('/login')#если пользователь не залогин , то пойдет отдыхать
 	doc = get_object_or_404(Dissertation, pk=pk)
-	return render(request, 'main/doca_detail.html', {'doc': doc,"user_name":login_who(request)['email']})
+	return render(request, 'main/doca_detail.html', {'dissertation': doc,"user_name":login_who(request)['email']})
+def search_view(request):
+	if login_or_no(request) == False:return redirect('/login')#если пользователь не залогин , то пойдет отдыхать
+
+	context = {
+		"base":{
+		"Свидетельство о регистрации программы базы данных":{"name":"DocSorpbd","pole":{"id":"id","registration_certificate_number":"номер свидетельства"}},
+
+		},
+		"user_name": login_who(request)['email']
+	}
+
+	form = request.POST
+	results = []
+	if request.method == 'POST':
+		table_name = form['main_choice']
+		field_name = form['secondary_choice']
+		search_text = form['text']
+		#print(table_name,field_name,search_text)		
+
+
+		if table_name == 'Dissertation':
+			results = Dissertation.objects.filter(**{f'{field_name}__icontains': search_text})
+			context["types"] = "Dissertation"
+			context["con"] = results
+		elif table_name == 'DocSorpbd':
+			results = DocSorpbd.objects.filter(**{f'{field_name}__icontains': search_text})
+			context["types"] = "DocSorpbd"
+			context["con"] = results
+		elif table_name == 'SoftwareRegistrationCertificate':
+			results = SoftwareRegistrationCertificate.objects.filter(**{f'{field_name}__icontains': search_text})
+			context["types"] = "SoftwareRegistrationCertificate"
+			context["con"] = results
+		for result in results:
+			print(11,result.id)  # Выводим ID в консоль
+
+	return render(request, 'main/search.html', context)

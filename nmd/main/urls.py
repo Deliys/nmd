@@ -32,4 +32,9 @@ urlpatterns = [
     path('delete_dissertation/<int:pk>/', views.delete_Dissertation, name='delete_dissertation'),
     path('add_dissertation/',views.create_dissertation),
     path('dissertation_get/<int:pk>/', views.Dissertation_detail, name='dissertation_get'),
+   
+
+
+    path('search_view/', views.search_view, name='search_view'),
+
 ]
