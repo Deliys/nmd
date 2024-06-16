@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404, redirect
 from .models import User
 import json
 from .forms import SearchForm
-
+#egrfgergrereg
 def login_or_no(request):#проверка на логин
 	user_data = json.loads(request.COOKIES.get('user_data', '{}'))
 	print(user_data)
