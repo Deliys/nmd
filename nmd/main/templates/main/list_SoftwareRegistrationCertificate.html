@@ -52,7 +52,7 @@
                 <td>
                     <ul>
                         {% for author in item.authors.all %}
-                            <li>{{ author.name }}</li>
+                            <li>{{ author.last_name }} {{ author.name}} {{ author.first_name}}</li>
                         {% endfor %}
                     </ul>
                 </td>

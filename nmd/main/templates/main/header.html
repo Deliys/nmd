@@ -81,9 +81,14 @@
         <div class="dropdown-content">
           <a href="/exit">Выход</a>
           <a href="/user_profile">Профиль</a>
+          {% if user_type != 'user' %}
+          <a href="/admin">Админка</a>
+          {% endif %}
         </div>
       </div>
       {% endif %}
+
+
 
     </div>
   </div>

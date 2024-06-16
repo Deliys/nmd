@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 # Create your views here.
-from .models import DocSorpbd ,Owner ,Autor ,SoftwareRegistrationCertificate,Article,Dissertation
+from .models import DocSorpbd ,Owner ,Autor ,SoftwareRegistrationCertificate,Article,Dissertation,User
 from django.shortcuts import render, redirect
 from .forms import DocSorpbdForm 
 from django.shortcuts import get_object_or_404, redirect
@@ -20,7 +20,8 @@ def login_who(request):#кто залогинин
 	user_data = json.loads(request.COOKIES.get('user_data', '{}'))
 	return user_data
 
-def type_user(email):return None # заготовка под раздение полномочий
+def type_user(email):
+	return User.objects.get(email=email).type_user
 
 
 def main_page(request):
@@ -37,7 +38,7 @@ def main_page(request):
 	}
 	return render(request, "main/main.html", context)
 #профиль пользователя
-def user_profile(request):
+def user_profile(request,pk):
 	return redirect("/")
 #обработка удалений
 def delete_artical_in_sbor(request,pk):
@@ -74,7 +75,8 @@ def render_doc_sorpbd(request):
 	doc_sorpbd = DocSorpbd.objects.all()
 	context = {
 		'docsorpbd_list': doc_sorpbd,
-		"user_name":login_who(request)['email']
+		"user_name":login_who(request)['email'],
+		"user_type": type_user(login_who(request)['email'])
 	}
 	return render(request,"main/doc_sorpbd.html", context)
 
@@ -406,7 +408,9 @@ def search_view(request):
 		"Свидетельство о регистрации программы базы данных":{"name":"DocSorpbd","pole":{"id":"id","registration_certificate_number":"номер свидетельства"}},
 
 		},
-		"user_name": login_who(request)['email']
+		"user_name": login_who(request)['email'],
+		"user_type": type_user(login_who(request)['email'])
+
 	}
 
 	form = request.POST
@@ -434,3 +438,11 @@ def search_view(request):
 			print(11,result.id)  # Выводим ID в консоль
 
 	return render(request, 'main/search.html', context)
+
+def admin(request):
+	context = {
+		"users": User.objects.all(),
+		"user_name": login_who(request)['email'],
+		"user_type": type_user(login_who(request)['email'])
+	}
+	return render(request, 'main/admin.html', context)

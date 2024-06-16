@@ -42,7 +42,7 @@
                 <td>
                     <ul>
                         {% for author in item.authors.all %}
-                            <li>{{ author.name }}</li>
+                            <li>{{ author.last_name }} {{ author.name}} {{ author.first_name}}</li>
                         {% endfor %}
                     </ul>
                 </td>
@@ -65,11 +65,18 @@
                         {% csrf_token %}
                         <button type="submit" class="btn btn-danger">Удалить</button>
                     </form>
+                    
+                    <a href="/docSorp_detail/{{item.id}}"> <button class="btn btn-primary">Посмотреть запись</button></a>
+                   
+                 
                 </td>
             </tr>
             {% endfor %}
+
+
         </tbody>
     </table>
+
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
