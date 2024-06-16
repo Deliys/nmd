@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Форма поиска</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var mainSelect = document.getElementById('mainSelect');
+            var secondarySelect = document.getElementById('secondarySelect');
+
+            mainSelect.addEventListener('change', function() {
+                var value = mainSelect.value;
+                secondarySelect.innerHTML = '';
+
+                if(value === '1') {
+                    var option1 = document.createElement('option');
+                    option1.value = 'field_1';
+                    option1.textContent = 'Поле 1';
+                    secondarySelect.appendChild(option1);
+                } else if(value === '2') {
+                    var option2 = document.createElement('option');
+                    option2.value = 'field_2';
+                    option2.textContent = 'Поле 2';
+                    secondarySelect.appendChild(option2);
+                } else if(value === '3') {
+                    var option3 = document.createElement('option');
+                    option3.value = 'field_3';
+                    option3.textContent = 'Поле 3';
+                    secondarySelect.appendChild(option3);
+                    var option3 = document.createElement('option');
+                    option3.value = 'field_3';
+                    option3.textContent = 'Поле 3';
+                    secondarySelect.appendChild(option3);
+                                        var option3 = document.createElement('option');
+                    option3.value = 'field_3';
+                    option3.textContent = 'Поле 3';
+                    secondarySelect.appendChild(option3);                    
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+{% include 'main/header.html' %}
+<div class="container">
+    <h2>Поиск</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="mainSelect">Выбор</label>
+            <select id="mainSelect" class="form-control" name="main_choice">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="secondarySelect">Выбор 2</label>
+            <select id="secondarySelect" class="form-control" name="secondary_choice">
+                <!-- Опции будут добавлены с помощью JavaScript -->
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="textField">Текстовое поле</label>
+            <input type="text" id="textField" class="form-control" name="text">
+        </div>
+        <button type="submit" class="btn btn-primary">Запрос</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
