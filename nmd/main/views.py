@@ -46,7 +46,7 @@ def user_profile(request,pk):
 	doc_sorpbd = User.objects.filter(id=pk)[0]
 
 	print(pk,doc_sorpbd)
-	return render(request, 'main/user_detail.html', {'doc': doc_sorpbd,"user_name":login_who(request)['email'],	"user_type": type_user(login_who(request)['email']),})
+	return render(request, 'main/user_detail.html', {'doc': doc_sorpbd,"user_name":login_who(request)['email'],"idd": login_who(request)['id'],	"user_type": type_user(login_who(request)['email']),})
 
 #обработка удалений
 def delete_artical_in_sbor(request,pk):
