@@ -8,7 +8,7 @@
 {% include 'main/header.html' %}
 <div class="container">
     <h2>Список  Авторы</h2>
-    <a href="/create_autor">добавить автора</a>
+    <a href="/create_autor">Добавить автора</a>
     <table class="table table-striped">
         <thead>
             <tr>
@@ -34,7 +34,7 @@
                 <td>
                     <form method="post" action="{% url 'autor_get' item.id %}">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-danger">профлиь автора</button>
+                        <button type="submit" class="btn btn-danger">Профиль автора</button>
                     </form>
                 </td>
             </tr>
