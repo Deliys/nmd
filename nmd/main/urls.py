@@ -40,4 +40,8 @@ urlpatterns = [
 
     path('ch_type/<int:pk>/', views.ch_type, name='ch_type'),
 
+
+    path('edit_doc_sorpbd/<int:pk>/', views.edit_doc_sorpbd, name='edit_doc_sorpbd'),
+
+    
 ]

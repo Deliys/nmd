@@ -1,5 +1,5 @@
 from django.db import models
-
+from datetime import datetime as dt
 class Autor(models.Model):
 	id = models.AutoField(primary_key=True)
 	name = models.CharField(max_length=100)  # 1) имя
@@ -39,6 +39,12 @@ class DocSorpbd(models.Model):
 	organization_owners = models.ManyToManyField('Owner', related_name='organization_owners')#
 	def name_doc(self):
 		return self.database_name
+
+
+	def registrationdate_s(self):
+		return str(dt.strptime(str(self.registrationdate), '%Y-%m-%d')).split()[0]
+	def requestdate_s(self):
+		return str(dt.strptime(str(self.requestdate), '%Y-%m-%d')).split()[0]
 class Owner(models.Model):
 	id = models.AutoField(primary_key=True)
 	phone_number = models.CharField(max_length=20)

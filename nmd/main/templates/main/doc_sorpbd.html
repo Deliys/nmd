@@ -61,14 +61,20 @@
                     </ul>
                 </td>
                 <td>
+                    {% if user_type != 'user' %}
                     <form method="post" action="{% url 'delete_doc_sorpbd' item.id %}">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-danger">Удалить</button>
                     </form>
-                     {% if user_type != 'user' %}
-                    <a href="/docSorp_detail/{{item.id}}"> <button class="btn btn-primary">Посмотреть запись</button></a>
+                    <form method="get" action="{% url 'edit_doc_sorpbd' item.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Редактирование</button>
+                    </form>
                     {% endif %}
-                 
+               
+                    <a href="/docSorp_detail/{{item.id}}"> <button class="btn btn-primary">Посмотреть запись</button></a>
+                    
+                   
                 </td>
             </tr>
             {% endfor %}

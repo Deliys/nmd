@@ -42,11 +42,11 @@ def main_page(request):
 	return render(request, "main/main.html", context)
 #профиль пользователя
 def user_profile(request,pk):
-	if login_or_no(request) == False:return redirect('/login')#если пользователь не залогин , то пойдет отдыхать	
+	if login_or_no(request) == False:return redirect('/login')#если пользователь не залогин , то пойдет отдыхать    
 	doc_sorpbd = User.objects.filter(id=pk)[0]
 
 	print(pk,doc_sorpbd)
-	return render(request, 'main/user_detail.html', {'doc': doc_sorpbd,"user_name":login_who(request)['email'],"idd": login_who(request)['id'],	"user_type": type_user(login_who(request)['email']),})
+	return render(request, 'main/user_detail.html', {'doc': doc_sorpbd,"user_name":login_who(request)['email'],"idd": login_who(request)['id'], "user_type": type_user(login_who(request)['email']),})
 
 #обработка удалений
 def delete_artical_in_sbor(request,pk):
@@ -122,7 +122,7 @@ def get_pravo(request):
 	Ownerr = Owner.objects.all()
 	context = {
 		'Owner': Ownerr,
-		"user_name":login_who(request)['email'],		"user_type": type_user(login_who(request)['email']),
+		"user_name":login_who(request)['email'],        "user_type": type_user(login_who(request)['email']),
 		"idd": login_who(request)['id'],
 	}
 	return render(request,"main/list_pravo.html", context)
@@ -447,7 +447,7 @@ def search_view(request):
 		table_name = form['main_choice']
 		field_name = form['secondary_choice']
 		search_text = form['text']
-		#print(table_name,field_name,search_text)		
+		#print(table_name,field_name,search_text)       
 
 
 		if table_name == 'Dissertation':
@@ -483,10 +483,55 @@ def ch_type(request, pk):
 	if login_or_no(request) == False:return redirect('/login')#если пользователь не залогин , то пойдет отдыхать
 	
 	if request.method == 'POST':
-		new_type = request.POST.get('typee')  # Получаем новый тип пользователя из POST-данных	
+		new_type = request.POST.get('typee')  # Получаем новый тип пользователя из POST-данных  
 		user = User.objects.get(id=pk)  # Получаем пользователя по ID
 		user.type_user = new_type  # Изменяем тип пользователя
 		user.save()  # Сохраняем изменения в базе данных
 		return redirect('/admin')  # Перенаправляем на страницу администрирования
 
 
+def edit_doc_sorpbd(request, pk):
+	if login_or_no(request) == False:return redirect('/login')#если пользователь не залогин , то пойдет отдыхать
+	doc = DocSorpbd.objects.get(id=pk)
+	if request.method == 'POST':
+		data = request.POST
+		# Update the DocSorpbd object with new data
+		doc.registration_certificate_number = data['n_certifacete']
+		doc.database_name = data['name_db']
+		doc.request_number = data['number_za']
+		doc.requestdate = data['data_za']
+		doc.registrationdate = data['data_reg']
+		doc.save()
+		author_ids = data.getlist('autor')
+		doc.authors.clear()  # Clear existing authors before adding new ones
+		for author_id in author_ids:
+			author, _ = Autor.objects.get_or_create(id=author_id.strip())
+			doc.authors.add(author)
+		if "individual_owners" in data:
+			# Получаем список ID индивидуальных правообладателей
+			individual_owner_ids = data.getlist('individual_owners')
+			for owner_id in individual_owner_ids:
+				individual_owner, _ = Owner.objects.get_or_create(id=owner_id.strip())
+				doc.individual_owners.add(individual_owner)
+		if "organization_owners" in data:
+			# Получаем список ID организационных правообладателей
+			organization_owner_ids = data.getlist('organization_owners')
+			for owner_id in organization_owner_ids:
+				organization_owner, _ = Owner.objects.get_or_create(id=owner_id.strip())
+				doc.organization_owners.add(organization_owner)
+				doc.organization_owners.add(organization_owner)
+		return redirect('/', permanent=True)  # Redirect after successful update
+	else:
+		individual_owners = Owner.objects.filter(owner_types=True)
+		organization_owners = Owner.objects.filter(owner_types=False)
+		autors = Autor.objects.all()
+		context = {
+			"doc": doc,
+			"individual_owners": individual_owners,
+			"organization_owners": organization_owners,
+			"autors": autors,
+			"user_name": login_who(request)['email'],
+			"user_type": type_user(login_who(request)['email']),
+			"idd": login_who(request)['id'],
+		}
+		return render(request, 'main/edit_sorpbd.html', context)

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование свидетельства о регистрации программы базы данных</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+{% include 'main/header.html' %}
+<div class="container">
+    <h2>Редактирование свидетельства о регистрации программы базы данных</h2>
+    <form method="POST" action="{% url 'edit_doc_sorpbd' doc.id %}">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="n_certifacete" class="form-label">Номер свидетельства</label>
+            <input type="text" class="form-control" id="n_certifacete" name="n_certifacete" value="{{ doc.registration_certificate_number }}">
+        </div>
+        <div class="mb-3">
+            <label for="name_db" class="form-label">Название базы данных</label>
+            <input type="text" class="form-control" id="name_db" name="name_db" value="{{ doc.database_name }}">
+        </div>
+        <div class="mb-3">
+            <label for="number_za" class="form-label">Номер заявки</label>
+            <input type="text" class="form-control" id="number_za" name="number_za" value="{{ doc.request_number }}">
+        </div>
+        <div class="mb-3">
+            <label for="data_za" class="form-label">Дата заявки</label>
+            <input type="date" class="form-control" id="data_za" name="data_za" value="{{ doc.requestdate_s }}">
+        </div>
+        <div class="mb-3">
+            <label for="data_reg" class="form-label">Дата регистрации</label>
+            <input type="date" class="form-control" id="data_reg" name="data_reg" value="{{ doc.registrationdate_s }}">{{registrationdate_s}}
+        </div>
+        <div class="mb-3">
+            <label for="autor" class="form-label">Авторы</label>
+            <select multiple class="form-control" id="autor" name="autor">
+                {% for autor in autors %}
+                    <option value="{{ autor.id }}" {% if autor in doc.authors.all %} selected {% endif %}>
+                        {{ autor.last_name }} {{ autor.name }} {{ autor.first_name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+		<div class="mb-3">
+  		<label for="individual_owner" class="form-label">Индивидуальный правообладатель</label>
+              <select class="form-control"  name="individual_owners"  multiple>
+                {% for owner in individual_owners %}
+                  <option value="{{ owner.id }}">{{ owner.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+        <div class="mb-3">
+          <label for="organization_owner" class="form-label">Организационный правообладатель</label>
+                <select class="form-control"  name="organization_owner"  multiple> 
+                {% for owner in organization_owners %}
+                  <option value="{{ owner.id }}">{{ owner.name }}</option>
+                {% endfor %}
+              </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+    </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
