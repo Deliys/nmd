@@ -333,7 +333,7 @@ def login_view(request):
 					'type': user.type_user,
 					'email':email
 				}
-				response = redirect('/a')
+				response = redirect('/')
 				response.set_cookie('user_data', json.dumps(user_data), max_age=3600)
 				return response
 		except User.DoesNotExist:
