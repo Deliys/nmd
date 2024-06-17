@@ -17,7 +17,7 @@
     <label for="authorSelect" class="form-label">Автор</label>
     <select name="authors" class="form-select" id="authorSelect" multiple>
       {% for author in authors %}
-        <option value="{{ author.id }}">{{ author.name }}</option>
+        <option value="{{ author.id }}">{{ author.name }} {{author.first_name}} {{author.last_name}}</option>
       {% endfor %}
     </select>
   </div>
