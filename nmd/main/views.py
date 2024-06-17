@@ -146,7 +146,7 @@ def add_owner(request):
 
 		print(owner_types)
 
-		owner_types = 0
+
 		owner = Owner(phone_number=phone_number, name=name, owner_types=owner_types)
 		owner.save()
 		
