@@ -34,12 +34,20 @@ def main_page(request):
 		"doc_sorpbd": doc_sorpbd,
 		"softwareRegistrationCertificate": softwareRegistrationCertificate,
 		"dissertation":dissertation,
-		"user_name": login_who(request)['email']
+		"user_name": login_who(request)['email'],
+
+		"user_type": type_user(login_who(request)['email']),
+		"idd": login_who(request)['id'],
 	}
 	return render(request, "main/main.html", context)
 #профиль пользователя
 def user_profile(request,pk):
-	return redirect("/")
+	if login_or_no(request) == False:return redirect('/login')#если пользователь не залогин , то пойдет отдыхать	
+	doc_sorpbd = User.objects.filter(id=pk)[0]
+
+	print(pk,doc_sorpbd)
+	return render(request, 'main/user_detail.html', {'doc': doc_sorpbd,"user_name":login_who(request)['email'],	"user_type": type_user(login_who(request)['email']),})
+
 #обработка удалений
 def delete_artical_in_sbor(request,pk):
 	doc_sorpbd = get_object_or_404(Article, id=pk)
@@ -66,7 +74,9 @@ def render_article_list(request):
 	articles = Article.objects.all()
 	context = {
 		'article_list': articles,
-		'user_name': login_who(request)['email']
+		'user_name': login_who(request)['email'],
+				"user_type": type_user(login_who(request)['email']),
+		"idd": login_who(request)['id'],
 	}
 	return render(request, "main/article_list.html", context)
 def render_doc_sorpbd(request):
@@ -76,7 +86,8 @@ def render_doc_sorpbd(request):
 	context = {
 		'docsorpbd_list': doc_sorpbd,
 		"user_name":login_who(request)['email'],
-		"user_type": type_user(login_who(request)['email'])
+		"user_type": type_user(login_who(request)['email']),
+		"idd": login_who(request)['id'],
 	}
 	return render(request,"main/doc_sorpbd.html", context)
 
@@ -86,7 +97,9 @@ def list_SoftwareRegistrationCertificate(request):
 	doc_sorpbd = SoftwareRegistrationCertificate.objects.all()
 	context = {
 		'add_list_SoftwareRegistrationCertificate': doc_sorpbd,
-		"user_name":login_who(request)['email']
+		"user_name":login_who(request)['email'],
+				"user_type": type_user(login_who(request)['email']),
+		"idd": login_who(request)['id'],
 	}
 	return render(request,"main/list_SoftwareRegistrationCertificate.html", context)
 
@@ -97,7 +110,9 @@ def get_autor(request):
 	Autorr = Autor.objects.all()
 	context = {
 		'Autor': Autorr,
-		"user_name":login_who(request)['email']
+		"user_name":login_who(request)['email'],
+				"user_type": type_user(login_who(request)['email']),
+		"idd": login_who(request)['id'],
 	}
 	return render(request,"main/list_autor.html", context)
 def get_pravo(request):
@@ -107,7 +122,8 @@ def get_pravo(request):
 	Ownerr = Owner.objects.all()
 	context = {
 		'Owner': Ownerr,
-		"user_name":login_who(request)['email']
+		"user_name":login_who(request)['email'],		"user_type": type_user(login_who(request)['email']),
+		"idd": login_who(request)['id'],
 	}
 	return render(request,"main/list_pravo.html", context)
 
@@ -185,7 +201,9 @@ def create_doc_sorpbd(request):
 			"individual_owners":individual_owners,
 			"organization_owners":organization_owners,
 			"autors":autor,
-			"user_name":login_who(request)['email']
+			"user_name":login_who(request)['email'],
+					"user_type": type_user(login_who(request)['email']),
+		"idd": login_who(request)['id'],
 
 		}
 
@@ -266,7 +284,9 @@ def create_evm(request):
 			"individual_owners":individual_owners,
 			"organization_owners":organization_owners,
 			"authors":autor,
-			"user_name":login_who(request)['email']
+			"user_name":login_who(request)['email'],
+					"user_type": type_user(login_who(request)['email']),
+		"idd": login_who(request)['id'],
 
 
 		}
@@ -292,7 +312,9 @@ def autor_get(request, pk):
 	return render(request, 'main/autor_detail.html', {
 		'autor': autor,
 		"user_name": login_who(request)['email'],
-		'documentss': documentss
+		'documentss': documentss,
+				"user_type": type_user(login_who(request)['email']),
+		"idd": login_who(request)['id'],
 	})
 #авторизация
 def login_view(request):
@@ -353,7 +375,9 @@ def get_Dissertation(request):
 	Dissertationn = Dissertation.objects.all()
 	context = {
 		'dissertation': Dissertationn,
-		"user_name":login_who(request)['email']
+		"user_name":login_who(request)['email'],
+				"user_type": type_user(login_who(request)['email']),
+		"idd": login_who(request)['id'],
 	}
 	return render(request,"main/list_diser.html", context)
 def delete_Dissertation(request, pk):
@@ -393,7 +417,9 @@ def create_dissertation(request):
 		authors = Autor.objects.all()
 		context = {
 			"authors": authors,
-			"user_name": login_who(request)['email']
+			"user_name": login_who(request)['email'],
+					"user_type": type_user(login_who(request)['email']),
+		"idd": login_who(request)['id'],
 		}
 		return render(request, 'main/add_dissertation.html', context)
 def Dissertation_detail(request, pk):
@@ -409,7 +435,9 @@ def search_view(request):
 
 		},
 		"user_name": login_who(request)['email'],
-		"user_type": type_user(login_who(request)['email'])
+		"user_type": type_user(login_who(request)['email']),
+
+		"idd": login_who(request)['id'],
 
 	}
 
@@ -440,9 +468,25 @@ def search_view(request):
 	return render(request, 'main/search.html', context)
 
 def admin(request):
+	if login_or_no(request) == False:return redirect('/login')#если пользователь не залогин , то пойдет отдыхать
+
 	context = {
 		"users": User.objects.all(),
 		"user_name": login_who(request)['email'],
-		"user_type": type_user(login_who(request)['email'])
+		"user_type": type_user(login_who(request)['email']),
+		"idd": login_who(request)['id'],
+
 	}
 	return render(request, 'main/admin.html', context)
+
+def ch_type(request, pk):
+	if login_or_no(request) == False:return redirect('/login')#если пользователь не залогин , то пойдет отдыхать
+	
+	if request.method == 'POST':
+		new_type = request.POST.get('typee')  # Получаем новый тип пользователя из POST-данных	
+		user = User.objects.get(id=pk)  # Получаем пользователя по ID
+		user.type_user = new_type  # Изменяем тип пользователя
+		user.save()  # Сохраняем изменения в базе данных
+		return redirect('/admin')  # Перенаправляем на страницу администрирования
+
+

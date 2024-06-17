@@ -60,10 +60,13 @@
                 </td>
 
                 <td>
+                     {% if user_type != 'user' %}
                     <form method="post" action="{% url 'delete_dissertation' item.id %}">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-danger">Удалить</button>
                     </form>
+                       {% endif %}
+                      <a href="/dissertation_get/{{item.id}}" class="btn btn-primary">Посмотреть запись</a>
                 </td>
             </tr>
             {% endfor %}

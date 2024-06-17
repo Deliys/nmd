@@ -27,11 +27,27 @@
                 <td>{{ user.name }}</td>
                 <td>{{ user.phone }}</td>
                 <td>{{ user.email }}</td>
-                <td>{{ user.get_type_user_display }}</td>
+                <td>{{ user.get_type_user_display }}
+                <form method="post" action="{% url 'ch_type' user.id %}">
+                    <select id="typee" class="form-control" name="typee">
+                        <option value="user">Пользователь</option>
+                        <option value="manager">Менеджер</option>
+                        <option value="admin">Админ</option>
+
+                    </select>
+                    <button type="submit" class="btn btn-primary">Сменить тип пользователя</button>
+                </form>
+                </td>
+
                 <td>
                     <form method="post" action="{% url 'user_profile' user.id %}">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-primary">Профиль пользователя</button>
+                    </form>
+                    <br>
+                    <form method="post" action="{% url 'user_profile' 'user.email' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary">удалить пользователя</button>
                     </form>
                 </td>
             </tr>

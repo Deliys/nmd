@@ -80,8 +80,8 @@
         <a class="nav-link px-2 link-body-emphasis">{{ user_name }}</a>
         <div class="dropdown-content">
           <a href="/exit">Выход</a>
-          <a href="/user_profile">Профиль</a>
-          {% if user_type != 'user' %}
+          <a href="/user_profile/{{ idd }}">Профиль</a>
+          {% if user_type == 'admin' %}
           <a href="/admin">Админка</a>
           {% endif %}
         </div>

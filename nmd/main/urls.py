@@ -18,7 +18,7 @@ urlpatterns = [
     path('registrate/', views.register_view, name='register_view'),
     path('login/', views.login_view, name='login_view'),
     path('exit/', views.exit_view, name='exit'),
-    path('user_profile/<int:pk>/', views.user_profile, name='user_profile'),
+    path('user_profile/<str:pk>/', views.user_profile, name='user_profile'),
     path('autor_get/<int:pk>/', views.autor_get, name='autor_get'),
     path('docSorp_detail/<int:pk>/', views.DocSorp_detail, name='DocSorp_detail'),
     path('softwareregistrationertificate_detail/<int:pk>/', views.SoftwareRegistrationCertificate_detail, name='softwareRegistrationCertificate_detail'),
@@ -38,5 +38,6 @@ urlpatterns = [
     path('search_view/', views.search_view, name='search_view'),
     path('admin/', views.admin, name='admin'),
 
+    path('ch_type/<int:pk>/', views.ch_type, name='ch_type'),
 
 ]
