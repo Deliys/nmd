@@ -30,24 +30,39 @@
                     option1.value = 'location';
                     option1.textContent = 'место выполнения диссертации';
                     secondarySelect.appendChild(option1);
-                } else if(value === '2') {
-                    var option2 = document.createElement('option');
-                    option2.value = 'organization_owners';
-                    option2.textContent = 'organization_owners';
-                    secondarySelect.appendChild(option2);
-                } else if(value === '3') {
-                    var option3 = document.createElement('option');
-                    option3.value = 'field_3';
-                    option3.textContent = 'Поле 3';
-                    secondarySelect.appendChild(option3);
-                    var option3 = document.createElement('option');
-                    option3.value = 'field_3';
-                    option3.textContent = 'Поле 3';
-                    secondarySelect.appendChild(option3);
-                                        var option3 = document.createElement('option');
-                    option3.value = 'field_3';
-                    option3.textContent = 'Поле 3';
-                    secondarySelect.appendChild(option3);                    
+                } else if(value === 'DocSorpbd') {
+                    var option1 = document.createElement('option');
+                    option1.value = 'id';
+                    option1.textContent = 'id';
+                    secondarySelect.appendChild(option1);
+                    var option1 = document.createElement('option');
+                    option1.value = 'registration_certificate_number';
+                    option1.textContent = 'название базы данных';
+                    secondarySelect.appendChild(option1);
+                    var option1 = document.createElement('option');
+                    option1.value = 'request_number';
+                    option1.textContent = 'номер заявки';
+                    secondarySelect.appendChild(option1);
+
+
+                } else if(value === 'SoftwareRegistrationCertificate') {
+                    var option1 = document.createElement('option');
+                    option1.value = 'id';
+                    option1.textContent = 'id';
+                    secondarySelect.appendChild(option1);
+                    var option1 = document.createElement('option');
+                    option1.value = 'certificate_number';
+                    option1.textContent = 'номер сертификата';
+                    secondarySelect.appendChild(option1);
+                    var option1 = document.createElement('option');
+                    option1.value = 'software_name';
+                    option1.textContent = 'название программы';
+                    secondarySelect.appendChild(option1);
+
+                    var option1 = document.createElement('option');
+                    option1.value = 'request_number';
+                    option1.textContent = 'номер заявки';
+                    secondarySelect.appendChild(option1);                 
                 }
             }
             dd();
@@ -143,9 +158,101 @@
     </table>
 </div>
 {% elif types == "DocSorpbd" %}
-    <!-- Какой-то код для DocSorpbd -->
+<div class="container">
+        <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Автор</th>
+                <th>номер свидетельства</th>
+                <th>название базы данных</th>
+                <th>номер заявки</th>
+
+                <th></th>
+                <th>правообладатель</th>
+                <th>правообладатель организация</th>
+              
+                <th>действие</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in con %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.registration_certificate_number }}</td>
+                <td>{{ item.database_name }}</td>
+                <td>{{ item.request_number }}</td>
+
+                <td>
+
+                </td>
+                <td>
+                    <ul>
+                        {% for individual_owner in item.individual_owners.all %}
+                            <li>{{ individual_owner.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        {% for organization_owner in item.organization_owners.all %}
+                            <li>{{ organization_owner.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                    <td><a href="/docSorp_detail/{{item.id}}" class="btn btn-primary">Посмотреть запись</a></td>
+                </tr>       
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% elif types == "SoftwareRegistrationCertificate" %}
-    <!-- Какой-то код для SoftwareRegistrationCertificate -->
+<div class="container">
+        <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>номер свидетельства</th>
+                <th>название программы</th>
+                <th>номер заявки</th>
+                <th>авторы</th>
+                <th>правообладатель</th>
+                <th>правообладатель организация</th>
+                <th>действие</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in con %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.certificate_number }}</td>
+                <td>{{ item.software_name }}</td>
+                <td>{{ item.request_number }}</td>
+                <td>
+                    <ul>
+                        {% for author in item.authors.all %}
+                            <li>{{ author.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        {% for individual_owner in item.individual_owners.all %}
+                            <li>{{ individual_owner.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        {% for organization_owner in item.organization_owners.all %}
+                            <li>{{ organization_owner.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td><a href="/softwareregistrationertificate_detail/{{item.id}}" class="btn btn-primary">Посмотреть запись</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endif %}
 
 

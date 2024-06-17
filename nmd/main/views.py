@@ -430,13 +430,8 @@ def search_view(request):
 	if login_or_no(request) == False:return redirect('/login')#если пользователь не залогин , то пойдет отдыхать
 
 	context = {
-		"base":{
-		"Свидетельство о регистрации программы базы данных":{"name":"DocSorpbd","pole":{"id":"id","registration_certificate_number":"номер свидетельства"}},
-
-		},
 		"user_name": login_who(request)['email'],
 		"user_type": type_user(login_who(request)['email']),
-
 		"idd": login_who(request)['id'],
 
 	}
