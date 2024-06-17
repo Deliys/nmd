@@ -27,7 +27,7 @@ urlpatterns = [
     path('list_artical_in_sbor/',views.render_article_list),
     path('delete_artical_in_sbor/<int:pk>/', views.delete_artical_in_sbor, name='delete_artical_in_sbor'),
     
-    #тут у нас все связаное с десертациями
+    #тут у нас все связаное с диссертациями
     path('list_dissertation/',views.get_Dissertation),
     path('delete_dissertation/<int:pk>/', views.delete_Dissertation, name='delete_dissertation'),
     path('add_dissertation/',views.create_dissertation),
