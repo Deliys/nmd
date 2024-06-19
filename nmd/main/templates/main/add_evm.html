@@ -8,18 +8,36 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+
+
+
+
+
 {% include 'main/header.html' %}
 <div class="container"><h1>Добавление новой записи</h1></div>
   <div class="container">
 
 <form method="post">
   <div class="mb-3">
-    <label for="authorSelect" class="form-label">Автор</label>
-    <select name="authors" class="form-select" id="authorSelect" multiple>
-      {% for author in authors %}
-        <option value="{{ author.id }}">{{ author.name }} {{author.first_name}} {{author.last_name}}</option>
-      {% endfor %}
-    </select>
+    <label for="authorSelect" class="form-label">Поиск автора</label>
+    <input type="text" id="textField" class="form-control" name="text" >
+    <div style="display: flex;justify-content: space-between;">
+          <select style="width:50%" name="authors" class="form-select" id="authorSelect" multiple>
+              {% for author in authors %}
+                <option value="{{ author.id }}">{{ author.name }} {{author.first_name}} {{author.last_name}}</option>
+              {% endfor %}
+          </select>
+          <div style="width:50%" id=ch-autor>
+            <p>*здесь список выбраных авторов</p>
+
+          
+          </div>
+            
+     
+  </div>
+   
+
+
   </div>
   <div class="mb-3">
     <label for="certificateNumber" class="form-label">Номер свидетельства</label>
@@ -67,5 +85,51 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
+
+
+
+
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var textField = document.getElementById('textField');
+    var secondarySelect = document.getElementById('authorSelect');
+    var options = secondarySelect.options;
+    console.log(22)
+    textField.addEventListener('input', function() {
+        var search = textField.value.toLowerCase();
+        console.log(22)
+        for (var i = 0; i < options.length; i++) {
+            var optionText = options[i].text.toLowerCase();
+            var optionValue = options[i].value.toLowerCase();
+            var matchText = optionText.indexOf(search) > -1;
+            var matchValue = optionValue.indexOf(search) > -1;
+            options[i].style.display = matchText || matchValue ? '' : 'none';
+        }
+    });
+});
+document.addEventListener('DOMContentLoaded', (event) => {
+  const authorSelect = document.getElementById('authorSelect');
+  const chAutor = document.getElementById('ch-autor');
+
+  authorSelect.addEventListener('change', function() {
+   
+    chAutor.innerHTML = '*здесь список выбраных авторов';
+
+  
+    const selectedAuthors = Array.from(this.selectedOptions).map(option => option.text);
+
+    selectedAuthors.forEach(author => {
+      const p = document.createElement('p');
+      p.textContent = author;
+      chAutor.appendChild(p);
+    });
+  });
+});
+</script>
+
 
 </html>
