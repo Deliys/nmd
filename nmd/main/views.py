@@ -302,11 +302,15 @@ def autor_get(request, pk):
 	#получение докуметов автора по базам
 	doc_sorpbd = DocSorpbd.objects.filter(authors=autor)
 	software_registration_certificates = SoftwareRegistrationCertificate.objects.filter(authors=autor)
+	dissertation = Dissertation.objects.filter(author=autor)
+
 
 	#подготовка списка для шаблона 
 	documentss = []
 	documentss.append({"bt":"/docSorp_detail","name_t":"Свидетельство о регистрации программы базы данных","documents":doc_sorpbd})
 	documentss.append({"bt":"/softwareregistrationertificate_detail","name_t":"Свидетельств о регистрации программы для ЭВМ","documents":software_registration_certificates})
+	documentss.append({"bt":"/softwareregistrationertificate_detail","name_t":"Диссертация","documents":dissertation})
+
 
 
 	return render(request, 'main/autor_detail.html', {
