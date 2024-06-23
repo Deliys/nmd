@@ -448,6 +448,7 @@ def search_view(request):
 		search_text = form['text']
 		#print(table_name,field_name,search_text)       
 
+		print(form)
 
 		if table_name == 'Dissertation':
 			results = Dissertation.objects.filter(**{f'{field_name}__icontains': search_text})

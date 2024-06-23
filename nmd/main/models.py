@@ -26,6 +26,9 @@ class Article(models.Model):
 	presentation_form = models.CharField(max_length=50)  # 66) форма представления (печатная, электронная)
 	publication_date = models.DateField()  # 67) дата выхода из печати
 
+	p_date = models.CharField(max_length=20,null=True)  # дата создания
+
+
 class DocSorpbd(models.Model):
 
 	id = models.AutoField(primary_key=True)
@@ -37,6 +40,9 @@ class DocSorpbd(models.Model):
 	authors = models.ManyToManyField(Autor)#автор 
 	individual_owners = models.ManyToManyField('Owner', related_name='individual_owners')#правообладатель 
 	organization_owners = models.ManyToManyField('Owner', related_name='organization_owners')#
+	
+	p_date = models.CharField(max_length=20,null=True)  # дата создания
+
 	def name_doc(self):
 		return self.database_name
 
@@ -52,6 +58,8 @@ class Owner(models.Model):
 	owner_types =  models.BooleanField()
 
 class SoftwareRegistrationCertificate(models.Model):
+	p_date = models.CharField(max_length=20,null=True)  # дата создания
+
 	id = models.AutoField(primary_key=True)
 	certificate_number = models.CharField(max_length=50)
 	software_name = models.CharField(max_length=100)
@@ -86,6 +94,8 @@ class Dissertation(models.Model):
 	level = models.CharField(max_length=50, choices=[('candidate', 'Кандидатская'), ('doctor', 'Докторская')])  # уровень
 	organization = models.CharField(max_length=200, null=True)  # организация выполнения диссертации
 	location = models.CharField(max_length=200, null=True)  # место выполнения диссертации
+	p_date = models.CharField(max_length=20,null=True)  # дата создания
+	
 	def name_doc(self):
 		return self.title
 

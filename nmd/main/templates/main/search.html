@@ -30,6 +30,10 @@
                     option1.value = 'location';
                     option1.textContent = 'место выполнения диссертации';
                     secondarySelect.appendChild(option1);
+                    var option1 = document.createElement('option');
+                    option1.value = 'data_for';
+                    option1.textContent = 'Стати от даты ';
+                    secondarySelect.appendChild(option1);
                 } else if(value === 'DocSorpbd') {
                     var option1 = document.createElement('option');
                     option1.value = 'id';
@@ -68,6 +72,39 @@
             dd();
             mainSelect.addEventListener('change', dd);
         });
+    document.addEventListener('DOMContentLoaded', function() {
+        var yearSelect = document.getElementById('mainSelectt');
+        var tableRows = document.querySelectorAll('.container table tbody tr');
+
+        function filterByYear() {
+            var selectedYear = parseInt(yearSelect.value);
+            var fromYearChecked = document.getElementById('fromYearCheckbox').checked;
+            tableRows.forEach(function(row) {
+                var pDate = row.querySelector('td:nth-child(5)').textContent;
+                var rowYear = parseInt(pDate.split('-')[0]); // Предполагая, что дата в формате YYYY-MM-DD
+                if (selectedYear === 'none') {
+                    row.style.display = '';
+                } else if (fromYearChecked) {
+                    if (rowYear >= selectedYear) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                } else {
+                    if (rowYear === selectedYear) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                }
+            });
+        }
+
+        yearSelect.addEventListener('change', filterByYear);
+        document.getElementById('fromYearCheckbox').addEventListener('change', filterByYear);
+
+    });
+
     </script>
 </head>
 <body>
@@ -95,6 +132,21 @@
             <label for="textField">Текстовое поле</label>
             <input type="text" id="textField" class="form-control" name="text">
         </div>
+        <div class="form-group">
+            <label for="mainSelectt">Фильтр по дате</label>
+            <select id="mainSelectt" class="form-control" name="main_choicet">
+            
+            <option value="2024">2024</option>
+            <option value="2023">2023</option>
+            <option value="2022">2022</option>
+            <option value="2021">2021</option>
+            <option value="none">убрать фильтр</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <input type="checkbox" id="fromYearCheckbox" name="from_year">
+            <label for="fromYearCheckbox">С этого года</label>
+        </div>
         <button type="submit" class="btn btn-primary">Запрос</button>
     </form>
 </div>
@@ -110,6 +162,7 @@
                 <th>Участники</th>
                 <th>область науки</th>
                 <th>уровень</th>
+                <th>год публикации</th>
                 <th>организация выполнения диссертации/ место /выполнения диссертации</th>
                 <th>действие</th>
             </tr>
@@ -141,7 +194,7 @@
                 <td>{{item.science_fields}}</td>
               
                 <td>{{item.level}}</td>
-                <td>
+                <td class="p_date">{{ item.p_date }}</td>
                     
                 <li>{{ item.location}} - место выполнения</li>
                 <li>{{ item.organization}} - организация выполнения</li>
@@ -166,8 +219,7 @@
                 <th>номер свидетельства</th>
                 <th>название базы данных</th>
                 <th>номер заявки</th>
-
-                <th></th>
+                <th>год публикации</th>
                 <th>правообладатель</th>
                 <th>правообладатель организация</th>
               
@@ -182,7 +234,7 @@
                 <td>{{ item.database_name }}</td>
                 <td>{{ item.request_number }}</td>
 
-                <td>
+                <td class="p_date">{{ item.p_date }}</td>
 
                 </td>
                 <td>
@@ -214,6 +266,7 @@
                 <th>номер свидетельства</th>
                 <th>название программы</th>
                 <th>номер заявки</th>
+                <th>год публикации</th>
                 <th>авторы</th>
                 <th>правообладатель</th>
                 <th>правообладатель организация</th>
@@ -227,6 +280,8 @@
                 <td>{{ item.certificate_number }}</td>
                 <td>{{ item.software_name }}</td>
                 <td>{{ item.request_number }}</td>
+                <td class="p_date">{{ item.p_date }}</td>
+
                 <td>
                     <ul>
                         {% for author in item.authors.all %}
