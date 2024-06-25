@@ -126,11 +126,21 @@ function exportToJson() {
 }
 
 function exportToTxt() {
-   
-    var txtData = 'Программа: ' + '{{ software.software_name }}' + '\nсвидетельство о государственной регистрации программы для ЭВМ  ' + '{{ software.certificate_number }}' + ' / ' + '{{ software.authors.all }}' + ' ;\nправообладатель ' + '{{ software.organization_owners.all }}' + '. – № ' + '{{ software.request_number }}' + '; заявл. ' + '{{ software.request_date }}' + ';\nзарегистрировано в Реестре программ для ЭВМ ' + '{{ software.registration_date }}' + '.';
+    var authors = '';
+    {% for author in software.authors.all %}
+    authors += '{{ author.first_name }} {{ author.name }} (ID: {{ author.id }}); ';
+    {% endfor %}
+
+    var owners = '';
+    {% for owner in software.organization_owners.all %}
+    owners += '{{ owner.organization_name }} (ID: {{ owner.id }}); ';
+    {% endfor %}
+
+    var txtData = 'Программа: ' + '{{ software.software_name }}' + '\nсвидетельство о государственной регистрации программы для ЭВМ  ' + '{{ software.certificate_number }}' + ' / ' + authors + '\nправообладатель ' + owners + '. –  ' + '{{ software.request_number }}' + '; заявл. ' + '{{ software.request_date }}' + ';\nзарегистрировано в Реестре программ для ЭВМ ' + '{{ software.registration_date }}' + '.';
 
     download(txtData, 'software_data.txt', 'text/plain');
 }
+
 
 function download(content, fileName, contentType) {
    
