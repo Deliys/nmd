@@ -106,6 +106,42 @@
     </table>
 </div>
 
+<div class="container">
+    <!-- Кнопки экспорта -->
+    <button class="btn btn-primary" onclick="exportToJson()">Экспорт в JSON</button>
+    <button class="btn btn-primary" onclick="exportToTxt()">Экспорт в TXT</button>
+</div>
+
+
+<script type="text/javascript">
+function exportToJson() {
+
+    var data = {
+        'ID': '{{ software.id }}',
+        'Номер свидетельства': '{{ software.certificate_number }}',
+       
+    };
+    var jsonData = JSON.stringify(data);
+    download(jsonData, 'software_data.json', 'text/plain');
+}
+
+function exportToTxt() {
+   
+    var txtData = 'Программа: ' + '{{ software.software_name }}' + '\nсвидетельство о государственной регистрации программы для ЭВМ  ' + '{{ software.certificate_number }}' + ' / ' + '{{ software.authors.all }}' + ' ;\nправообладатель ' + '{{ software.organization_owners.all }}' + '. – № ' + '{{ software.request_number }}' + '; заявл. ' + '{{ software.request_date }}' + ';\nзарегистрировано в Реестре программ для ЭВМ ' + '{{ software.registration_date }}' + '.';
+
+    download(txtData, 'software_data.txt', 'text/plain');
+}
+
+function download(content, fileName, contentType) {
+   
+    var a = document.createElement("a");
+    var file = new Blob([content], {type: contentType});
+    a.href = URL.createObjectURL(file);
+    a.download = fileName;
+    a.click();
+}    
+</script>
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
